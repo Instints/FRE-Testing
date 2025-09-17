@@ -59,6 +59,11 @@
             header {
                 margin-bottom: 10px !important;
             }
+            
+            .reset-progress-btn {
+                padding: 8px 12px !important;
+                font-size: 0.9rem !important;
+            }
         }
 
         .container {
@@ -71,6 +76,9 @@
             margin-bottom: 20px;
             color: white;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
@@ -181,6 +189,67 @@
 
         .set-badge.gold {
             background: #ffd700;
+        }
+
+        /* Reset Progress Button */
+        .reset-progress-btn {
+            padding: 10px 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .reset-progress-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Confirmation Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #34495e;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #ecf0f1;
+            font-size: 1.5rem;
+        }
+
+        .modal p {
+            margin-bottom: 25px;
+            color: #bdc3c7;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
         }
 
         /* Mode Selection View */
@@ -967,7 +1036,20 @@
         <header>
             <h1>StudyMaster</h1>
             <p class="tagline">Master French verbs with interactive flashcards and quizzes</p>
+            <button class="reset-progress-btn" id="reset-progress-btn">Reset Progress</button>
         </header>
+
+        <!-- Confirmation Modal -->
+        <div class="modal" id="reset-confirm-modal">
+            <div class="modal-content">
+                <h3>Reset Progress</h3>
+                <p>Are you sure you want to reset all progress? This action cannot be undone.</p>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" id="reset-cancel">Cancel</button>
+                    <button class="btn btn-primary" id="reset-confirm">Yes, Reset</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Set Selection View -->
         <div id="set-selection-view" class="view active-view">
@@ -1180,13 +1262,176 @@
                         { question: "être", answer: "to be" },
                         { question: "avoir", answer: "to have" },
                         { question: "aller", answer: "to go" },
-                        { question: "faire", answer: "to do/to make" },
-                        { question: "dire", answer: "to say/to tell" },
-                        { question: "pouvoir", answer: "to be able to/can" },
+                        { question: "faire", answer: "to do / to make" },
+                        { question: "dire", answer: "to say / to tell" },
+                        { question: "pouvoir", answer: "can / to be able to" },
                         { question: "vouloir", answer: "to want" },
-                        { question: "savoir", answer: "to know" },
+                        { question: "devoir", answer: "must / to have to" },
+                        { question: "savoir", answer: "to know (a fact / how to)" },
                         { question: "voir", answer: "to see" },
-                        { question: "venir", answer: "to come" }
+                        { question: "venir", answer: "to come" },
+                        { question: "prendre", answer: "to take" },
+                        { question: "mettre", answer: "to put / place" },
+                        { question: "donner", answer: "to give" },
+                        { question: "parler", answer: "to speak" },
+                        { question: "aimer", answer: "to like / to love" },
+                        { question: "passer", answer: "to pass / to spend (time)" },
+                        { question: "trouver", answer: "to find" },
+                        { question: "demander", answer: "to ask" },
+                        { question: "comprendre", answer: "to understand" },
+                        { question: "rester", answer: "to stay" },
+                        { question: "entrer", answer: "to enter" },
+                        { question: "sortir", answer: "to go out" },
+                        { question: "arriver", answer: "to arrive" },
+                        { question: "commencer", answer: "to begin / to start" },
+                        { question: "finir", answer: "to finish" },
+                        { question: "travailler", answer: "to work" },
+                        { question: "jouer", answer: "to play" },
+                        { question: "acheter", answer: "to buy" },
+                        { question: "manger", answer: "to eat" },
+                        { question: "boire", answer: "to drink" },
+                        { question: "lire", answer: "to read" },
+                        { question: "écrire", answer: "to write" },
+                        { question: "écouter", answer: "to listen" },
+                        { question: "regarder", answer: "to watch / to look at" },
+                        { question: "dormir", answer: "to sleep" },
+                        { question: "se lever", answer: "to get up" },
+                        { question: "s'appeler", answer: "to be called (name)" },
+                        { question: "s'habiller", answer: "to get dressed" },
+                        { question: "se laver", answer: "to wash (oneself)" },
+                        { question: "attendre", answer: "to wait" },
+                        { question: "répondre", answer: "to answer" },
+                        { question: "penser", answer: "to think" },
+                        { question: "croire", answer: "to believe" },
+                        { question: "choisir", answer: "to choose" },
+                        { question: "ouvrir", answer: "to open" },
+                        { question: "fermer", answer: "to close" },
+                        { question: "perdre", answer: "to lose" },
+                        { question: "gagner", answer: "to win / to earn" },
+                        { question: "marcher", answer: "to walk" },
+                        { question: "courir", answer: "to run" },
+                        { question: "conduire", answer: "to drive" },
+                        { question: "apprendre", answer: "to learn" },
+                        { question: "enseigner", answer: "to teach" },
+                        { question: "envoyer", answer: "to send" },
+                        { question: "recevoir", answer: "to receive" },
+                        { question: "téléphoner", answer: "to call (phone)" },
+                        { question: "aider", answer: "to help" },
+                        { question: "montrer", answer: "to show" },
+                        { question: "chercher", answer: "to look for" },
+                        { question: "porter", answer: "to carry / to wear" },
+                        { question: "utiliser", answer: "to use" },
+                        { question: "essayer", answer: "to try" },
+                        { question: "payer", answer: "to pay" },
+                        { question: "cuisiner", answer: "to cook" },
+                        { question: "préparer", answer: "to prepare" },
+                        { question: "nettoyer", answer: "to clean" },
+                        { question: "laver", answer: "to wash" },
+                        { question: "changer", answer: "to change" },
+                        { question: "réparer", answer: "to repair / fix" },
+                        { question: "visiter", answer: "to visit" },
+                        { question: "habiter", answer: "to live" },
+                        { question: "revenir", answer: "to come back" },
+                        { question: "rentrer", answer: "to go back (home)" },
+                        { question: "tomber", answer: "to fall" },
+                        { question: "monter", answer: "to go up / to climb" },
+                        { question: "descendre", answer: "to go down" },
+                        { question: "returne", answer: "to return" },
+                        { question: "se souvenir", answer: "to remember" },
+                        { question: "se coucher", answer: "to go to bed" },
+                        { question: "s'amuser", answer: "to have fun" },
+                        { question: "s'arrêter", answer: "to stop" },
+                        { question: "se dépêcher", answer: "to hurry" },
+                        { question: "se promener", answer: "to take a walk" },
+                        { question: "se reposer", answer: "to rest" },
+                        { question: "s'intéresser (à)", answer: "to be interested (in)" },
+                        { question: "s'asseoir", answer: "to sit down" },
+                        { question: "accepter", answer: "to accept" },
+                        { question: "refuser", answer: "to refuse" },
+                        { question: "expliquer", answer: "to explain" },
+                        { question: "raconter", answer: "to tell / to narrate" },
+                        { question: "décrire", answer: "to describe" },
+                        { question: "inviter", answer: "to invite" },
+                        { question: "partager", answer: "to share" },
+                        { question: "garder", answer: "to keep" },
+                        { question: "apporter", answer: "to bring (an object)" },
+                        { question: "emmener", answer: "to take (someone)" },
+                        { question: "amener", answer: "to bring (someone)" },
+                        { question: "vivre", answer: "to live" },
+                        { question: "exister", answer: "to exist" },
+                        { question: "imaginer", answer: "to imagine" },
+                        { question: "décider", answer: "to decide" },
+                        { question: "préférer", answer: "to prefer" },
+                        { question: "continuer", answer: "to continue" },
+                        { question: "arrêter", answer: "to stop" },
+                        { question: "oublier", answer: "to forget" },
+                        { question: "rappeler", answer: "to remind / to call back" },
+                        { question: "connaître", answer: "to know (a person/place)" },
+                        { question: "découvrir", answer: "to discover" },
+                        { question: "proposer", answer: "to suggest / to propose" },
+                        { question: "offrir", answer: "to offer" },
+                        { question: "remplir", answer: "to fill" },
+                        { question: "vider", answer: "to empty" },
+                        { question: "organiser", answer: "to organize" },
+                        { question: "planter", answer: "to plant" },
+                        { question: "arroser", answer: "to water" },
+                        { question: "traverser", answer: "to cross" },
+                        { question: "voyager", answer: "to travel" },
+                        { question: "réserver", answer: "to book / to reserve" },
+                        { question: "louer", answer: "to rent" },
+                        { question: "dépenser", answer: "to spend (money)" },
+                        { question: "économiser", answer: "to save (money)" },
+                        { question: "espérer", answer: "to hope" },
+                        { question: "craindre", answer: "to fear" },
+                        { question: "sourire", answer: "to smile" },
+                        { question: "rire", answer: "to laugh" },
+                        { question: "pleurer", answer: "to cry" },
+                        { question: "embrasser", answer: "to kiss / hug" },
+                        { question: "crier", answer: "to shout" },
+                        { question: "chanter", answer: "to sing" },
+                        { question: "dessiner", answer: "to draw" },
+                        { question: "construire", answer: "to build" },
+                        { question: "nager", answer: "to swim" },
+                        { question: "accueillir", answer: "to welcome" },
+                        { question: "appartenir", answer: "to belong" },
+                        { question: "apparaître", answer: "to appear" },
+                        { question: "disparaître", answer: "to disappear" },
+                        { question: "battre", answer: "to beat" },
+                        { question: "contenir", answer: "to contain" },
+                        { question: "devenir", answer: "to become" },
+                        { question: "obtenir", answer: "to obtain / to get" },
+                        { question: "permettre", answer: "to allow / to permit" },
+                        { question: "promettre", answer: "to promise" },
+                        { question: "reconnaître", answer: "to recognize" },
+                        { question: "réussir", answer: "to succeed" },
+                        { question: "servir", answer: "to serve" },
+                        { question: "suffire", answer: "to be enough" },
+                        { question: "tenir", answer: "to hold" },
+                        { question: "traduire", answer: "to translate" },
+                        { question: "valoir", answer: "to be worth" },
+                        { question: "avancer", answer: "to move forward" },
+                        { question: "reculer", answer: "to move back" },
+                        { question: "améliorer", answer: "to improve" },
+                        { question: "vérifier", answer: "to check / to verify" },
+                        { question: "brancher", answer: "to plug in" },
+                        { question: "débrancher", answer: "to unplug" },
+                        { question: "télécharger", answer: "to download" },
+                        { question: "imprimer", answer: "to print" },
+                        { question: "sauvegarder", answer: "to save (a file)" },
+                        { question: "surfer", answer: "to surf (the internet)" },
+                        { question: "poster", answer: "to post" },
+                        { question: "commenter", answer: "to comment" },
+                        { question: "publier", answer: "to publish" },
+                        { question: "participer", answer: "to participate" },
+                        { question: "protéger", answer: "to protect" },
+                        { question: "éviter", answer: "to avoid" },
+                        { question: "prévenir", answer: "to warn / to inform" },
+                        { question: "remarquer", answer: "to notice" },
+                        { question: "remercier", answer: "to thank" },
+                        { question: "féliciter", answer: "to congratulate" },
+                        { question: "souhaiter", answer: "to wish" },
+                        { question: "profiter (de)", answer: "to enjoy / to take advantage of" },
+                        { question: "exiger", answer: "to demand" }
                     ]
                 },
                 {
@@ -1197,11 +1442,72 @@
                         { question: "les hommes", answer: "men" },
                         { question: "les femmes", answer: "women" },
                         { question: "les enfants", answer: "children" },
-                        { question: "la famille", answer: "family" },
-                        { question: "le père", answer: "father" },
-                        { question: "la mère", answer: "mother" },
-                        { question: "le frère", answer: "brother" },
-                        { question: "la sœur", answer: "sister" }
+                        { question: "les garçons", answer: "boys" },
+                        { question: "les filles", answer: "girls" },
+                        { question: "les bébés", answer: "babies" },
+                        { question: "les amis", answer: "friends (m.)" },
+                        { question: "les amies", answer: "friends (f.)" },
+                        { question: "les copains", answer: "mates / buddies (m.)" },
+                        { question: "les copines", answer: "mates / buddies (f.)" },
+                        { question: "les voisins", answer: "neighbors (m.)" },
+                        { question: "les voisines", answer: "neighbors (f.)" },
+                        { question: "les camarades", answer: "classmates / companions" },
+                        { question: "les familles", answer: "families" },
+                        { question: "les parents", answer: "parents" },
+                        { question: "les pères", answer: "fathers" },
+                        { question: "les mères", answer: "mothers" },
+                        { question: "les frères", answer: "brothers" },
+                        { question: "les sœurs", answer: "sisters" },
+                        { question: "les enfants", answer: "children / sons and daughters" },
+                        { question: "les fils", answer: "sons" },
+                        { question: "les filles", answer: "daughters" },
+                        { question: "les grands-parents", answer: "grandparents" },
+                        { question: "les grands-pères", answer: "grandfathers" },
+                        { question: "les grands-mères", answer: "grandmothers" },
+                        { question: "les petits-enfants", answer: "grandchildren" },
+                        { question: "les petits-fils", answer: "grandsons" },
+                        { question: "les petites-filles", answer: "granddaughters" },
+                        { question: "les oncles", answer: "uncles" },
+                        { question: "les tantes", answer: "aunts" },
+                        { question: "les cousins", answer: "cousins (m.)" },
+                        { question: "les cousines", answer: "cousins (f.)" },
+                        { question: "les neveux", answer: "nephews" },
+                        { question: "les nièces", answer: "nieces" },
+                        { question: "les maris", answer: "husbands" },
+                        { question: "les femmes", answer: "wives" },
+                        { question: "les époux", answer: "spouses (m.)" },
+                        { question: "les épouses", answer: "spouses (f.)" },
+                        { question: "les couples", answer: "couples" },
+                        { question: "les fiancés", answer: "fiancés (m.)" },
+                        { question: "les fiancées", answer: "fiancées (f.)" },
+                        { question: "les voisins de classe", answer: "classmates" },
+                        { question: "les professeurs", answer: "teachers" },
+                        { question: "les élèves", answer: "pupils / students" },
+                        { question: "les étudiants", answer: "students (higher education)" },
+                        { question: "les collègues", answer: "colleagues" },
+                        { question: "les patrons", answer: "bosses (m.)" },
+                        { question: "les patronnes", answer: "bosses (f.)" },
+                        { question: "les travailleurs", answer: "workers (m.)" },
+                        { question: "les travailleuses", answer: "workers (f.)" },
+                        { question: "les médecins", answer: "doctors" },
+                        { question: "les infirmiers", answer: "nurses (m.)" },
+                        { question: "les infirmières", answer: "nurses (f.)" },
+                        { question: "les policiers", answer: "police officers (m.)" },
+                        { question: "les policières", answer: "police officers (f.)" },
+                        { question: "les pompiers", answer: "firefighters" },
+                        { question: "les clients", answer: "customers (m.)" },
+                        { question: "les clientes", answer: "customers (f.)" },
+                        { question: "les vendeurs", answer: "sellers / shop assistants (m.)" },
+                        { question: "les vendeuses", answer: "sellers / shop assistants (f.)" },
+                        { question: "les serveurs", answer: "waiters" },
+                        { question: "les serveuses", answer: "waitresses" },
+                        { question: "les touristes", answer: "tourists" },
+                        { question: "les étrangers", answer: "foreigners (m.)" },
+                        { question: "les étrangères", answer: "foreigners (f.)" },
+                        { question: "les habitants", answer: "inhabitants (m.)" },
+                        { question: "les habitantes", answer: "inhabitants (f.)" },
+                        { question: "les gens âgés", answer: "elderly people" },
+                        { question: "les jeunes", answer: "young people" }
                     ]
                 },
                 {
@@ -1210,15 +1516,4392 @@
                     questions: [
                         { question: "les aliments", answer: "foods" },
                         { question: "les boissons", answer: "drinks" },
-                        { question: "l'eau", answer: "water" },
-                        { question: "le pain", answer: "bread" },
-                        { question: "le fromage", answer: "cheese" },
-                        { question: "le vin", answer: "wine" },
-                        { question: "la viande", answer: "meat" },
+                        { question: "les fruits", answer: "fruits" },
                         { question: "les légumes", answer: "vegetables" },
-                        { question: "les fruits", answer: "fruits" }
+                        { question: "les pommes", answer: "apples" },
+                        { question: "les poires", answer: "pears" },
+                        { question: "les bananes", answer: "bananas" },
+                        { question: "les oranges", answer: "oranges" },
+                        { question: "les citrons", answer: "lemons" },
+                        { question: "les fraises", answer: "strawberries" },
+                        { question: "les framboises", answer: "raspberries" },
+                        { question: "les cerises", answer: "cherries" },
+                        { question: "les raisins", answer: "grapes" },
+                        { question: "les pêches", answer: "peaches" },
+                        { question: "les abricots", answer: "apricots" },
+                        { question: "les pastèques", answer: "watermelons" },
+                        { question: "les melons", answer: "melons" },
+                        { question: "les ananas", answer: "pineapples" },
+                        { question: "les mangues", answer: "mangoes" },
+                        { question: "les tomates", answer: "tomatoes" },
+                        { question: "les carottes", answer: "carrots" },
+                        { question: "les pommes de terre", answer: "potatoes" },
+                        { question: "les patates douces", answer: "sweet potatoes" },
+                        { question: "les oignons", answer: "onions" },
+                        { question: "les ails", answer: "garlics" },
+                        { question: "les poivrons", answer: "peppers" },
+                        { question: "les concombres", answer: "cucumbers" },
+                        { question: "les salades", answer: "salads / lettuces" },
+                        { question: "les épinards", answer: "spinach" },
+                        { question: "les haricots verts", answer: "green beans" },
+                        { question: "les petits pois", answer: "peas" },
+                        { question: "les courgettes", answer: "zucchinis" },
+                        { question: "les aubergines", answer: "eggplants" },
+                        { question: "les champignons", answer: "mushrooms" },
+                        { question: "les brocolis", answer: "broccolis" },
+                        { question: "les choux", answer: "cabbages" },
+                        { question: "les choux-fleurs", answer: "cauliflowers" },
+                        { question: "les œufs", answer: "eggs" },
+                        { question: "les pains", answer: "breads" },
+                        { question: "les baguettes", answer: "baguettes" },
+                        { question: "les croissants", answer: "croissants" },
+                        { question: "les brioches", answer: "brioches" },
+                        { question: "les gâteaux", answer: "cakes" },
+                        { question: "les tartes", answer: "pies / tarts" },
+                        { question: "les biscuits", answer: "cookies / biscuits" },
+                        { question: "les chocolats", answer: "chocolates" },
+                        { question: "les bonbons", answer: "candies" },
+                        { question: "les glaces", answer: "ice creams" },
+                        { question: "les fromages", answer: "cheeses" },
+                        { question: "les yaourts", answer: "yogurts" },
+                        { question: "les laits", answer: "milks" },
+                        { question: "les beurres", answer: "butters" },
+                        { question: "les huiles", answer: "oils" },
+                        { question: "les farines", answer: "flours" },
+                        { question: "les sucres", answer: "sugars" },
+                        { question: "les sels", answer: "salts" },
+                        { question: "les poivres", answer: "peppers (spice)" },
+                        { question: "les épices", answer: "spices" },
+                        { question: "les sauces", answer: "sauces" },
+                        { question: "les soupes", answer: "soups" },
+                        { question: "les potages", answer: "thick soups" },
+                        { question: "les viandes", answer: "meats" },
+                        { question: "les poulets", answer: "chickens" },
+                        { question: "les dindes", answer: "turkeys" },
+                        { question: "les bœufs", answer: "beefs" },
+                        { question: "les veaux", answer: "veals" },
+                        { question: "les porcs", answer: "porks" },
+                        { question: "les agneaux", answer: "lambs" },
+                        { question: "les steaks", answer: "steaks" },
+                        { question: "les jambons", answer: "hams" },
+                        { question: "les saucisses", answer: "sauces" },
+                        { question: "les poissons", answer: "fishes" },
+                        { question: "les saumons", answer: "salmons" },
+                        { question: "les thons", answer: "tunas" },
+                        { question: "les sardines", answer: "sardines" },
+                        { question: "les crevettes", answer: "shrimps" },
+                        { question: "les moules", answer: "mussels" },
+                        { question: "les huîtres", answer: "oysters" },
+                        { question: "les coquillages", answer: "shellfish" },
+                        { question: "les plats", answer: "dishes" },
+                        { question: "les repas", answer: "meals" },
+                        { question: "les petits déjeuners", answer: "breakfasts" },
+                        { question: "les déjeuners", answer: "lunches" },
+                        { question: "les dîners", answer: "dinners" },
+                        { question: "les collations", answer: "snacks" },
+                        { question: "les menus", answer: "menus" },
+                        { question: "les entrées", answer: "starters" },
+                        { question: "les plats principaux", answer: "main courses" },
+                        { question: "les desserts", answer: "desserts" },
+                        { question: "les boissons chaudes", answer: "hot drinks" },
+                        { question: "les cafés", answer: "coffees" },
+                        { question: "les thés", answer: "teas" },
+                        { question: "les tisanes", answer: "herbal teas" },
+                        { question: "les chocolats chauds", answer: "hot chocolates" },
+                        { question: "les boissons froides", answer: "cold drinks" },
+                        { question: "les jus", answer: "juices" },
+                        { question: "les jus d’orange", answer: "orange juices" },
+                        { question: "les jus de pomme", answer: "apple juices" },
+                        { question: "les eaux", answer: "waters" },
+                        { question: "les eaux minérales", answer: "mineral waters" },
+                        { question: "les sodas", answer: "sodas" },
+                        { question: "les limonades", answer: "lemonades" },
+                        { question: "les bières", answer: "beers" },
+                        { question: "les vins", answer: "wines" },
+                        { question: "les champagnes", answer: "champagnes" },
+                        { question: "les cocktails", answer: "cocktails" },
+                        { question: "les bouteilles", answer: "bottles" },
+                        { question: "les verres", answer: "glass" },
+                        { question: "les tasses", answer: "cups" },
+                        { question: "les assiettes", answer: "plates" },
+                        { question: "les bols", answer: "bowls" },
+                        { question: "les fourchettes", answer: "forks" },
+                        { question: "les couteaux", answer: "knives" },
+                        { question: "les cuillères", answer: "spoons" },
+                        { question: "les nappes", answer: "tablecloths" },
+                        { question: "les serviettes", answer: "napkins" },
+                        { question: "les repas rapides", answer: "fast foods" },
+                        { question: "les pizzas", answer: "pizzas" },
+                        { question: "les sandwiches", answer: "sandwiches" },
+                        { question: "les hamburgers", answer: "hamburgers" },
+                        { question: "les frites", answer: "French fries" },
+                        { question: "les salades de fruits", answer: "fruit salads" },
+                        { question: "les plats cuisinés", answer: "ready-made meals" },
+                        { question: "les conserves", answer: "canned foods" },
+                        { question: "les produits frais", answer: "fresh products" },
+                        { question: "les produits surgelés", answer: "frozen products" },
+                        { question: "les ingrédients", answer: "ingredients" },
+                        { question: "les recettes", answer: "recipes" },
+                        { question: "les marchés", answer: "markets" },
+                        { question: "les supermarchés", answer: "supermarkets" },
+                        { question: "les restaurants", answer: "restaurants" },
+                        { question: "les cafés", answer: "cafés" },
+                        { question: "les boulangeries", answer: "bakeries" },
+                        { question: "les pâtisseries", answer: "pastry shops" },
+                        { question: "les boucheries", answer: "butcher shops" },
+                        { question: "les poissonneries", answer: "fish shops" },
+                        { question: "les épiceries", answer: "grocery stores" },
+                        { question: "les rayons", answer: "aisles / departments" },
+                        { question: "les caisses", answer: "cash registers / checkouts" },
+                        { question: "les serveurs", answer: "waiters" },
+                        { question: "les serveuses", answer: "waitresses" },
+                        { question: "les chefs", answer: "chefs / cooks" },
+                        { question: "les cuisiniers", answer: "cooks (m.)" },
+                        { question: "les cuisinières", answer: "cooks (f.)" },
+                        { question: "les clients", answer: "customers (m.)" },
+                        { question: "les clientes", answer: "customers (f.)" },
+                        { question: "les additions", answer: "bills / checks (restaurant)" },
+                        { question: "les pourboires", answer: "tips" },
+                        { question: "les réservations", answer: "reservations" },
+                        { question: "les commandes", answer: "orders" }
                     ]
-                }
+                },
+                {
+  title: "School & Work",
+  icon: "fas fa-briefcase",
+  questions: [
+    { question: "les écoles", answer: "schools" },
+    { question: "les collèges", answer: "middle schools" },
+    { question: "les lycées", answer: "high schools" },
+    { question: "les universités", answer: "universities" },
+    { question: "les classes", answer: "classes" },
+    { question: "les salles de classe", answer: "classrooms" },
+    { question: "les cours", answer: "lessons / classes" },
+    { question: "les matières", answer: "school subjects" },
+    { question: "les devoirs", answer: "homework" },
+    { question: "les examens", answer: "exams" },
+    { question: "les tests", answer: "tests" },
+    { question: "les notes", answer: "grades / marks" },
+    { question: "les diplômes", answer: "diplomas / degrees" },
+    { question: "les certificats", answer: "certificates" },
+    { question: "les bibliothèques", answer: "libraries" },
+    { question: "les laboratoires", answer: "laboratories" },
+    { question: "les cantines", answer: "cafeterias" },
+    { question: "les terrains de sport", answer: "sports fields" },
+    { question: "les gymnases", answer: "gyms" },
+    { question: "les professeurs", answer: "teachers" },
+    { question: "les maîtres", answer: "teachers (m.)" },
+    { question: "les maîtresses", answer: "teachers (f.)" },
+    { question: "les instituteurs", answer: "primary teachers (m.)" },
+    { question: "les institutrices", answer: "primary teachers (f.)" },
+    { question: "les élèves", answer: "pupils" },
+    { question: "les étudiants", answer: "students" },
+    { question: "les camarades", answer: "classmates" },
+    { question: "les directeurs", answer: "principals / headmasters" },
+    { question: "les directrices", answer: "principals / headmistresses" },
+    { question: "les conseillers", answer: "advisors / counselors (m.)" },
+    { question: "les conseillères", answer: "advisors / counselors (f.)" },
+    { question: "les secrétaires", answer: "secretaries" },
+    { question: "les bureaux", answer: "offices" },
+    { question: "les chaises", answer: "chairs" },
+    { question: "les tables", answer: "tables" },
+    { question: "les tableaux", answer: "boards" },
+    { question: "les craies", answer: "chalks" },
+    { question: "les marqueurs", answer: "markers" },
+    { question: "les stylos", answer: "pens" },
+    { question: "les crayons", answer: "pencils" },
+    { question: "les règles", answer: "rulers" },
+    { question: "les gommes", answer: "erasers" },
+    { question: "les trousses", answer: "pencil cases" },
+    { question: "les cartables", answer: "schoolbags" },
+    { question: "les sacs à dos", answer: "backpacks" },
+    { question: "les livres", answer: "books" },
+    { question: "les cahiers", answer: "notebooks" },
+    { question: "les feuilles", answer: "sheets of paper" },
+    { question: "les papiers", answer: "papers" },
+    { question: "les dossiers", answer: "folders / files" },
+    { question: "les imprimantes", answer: "printers" },
+    { question: "les photocopieuses", answer: "photocopiers" },
+    { question: "les ordinateurs", answer: "computers" },
+    { question: "les claviers", answer: "keyboards" },
+    { question: "les souris", answer: "mice (computer)" },
+    { question: "les écrans", answer: "screens" },
+    { question: "les projecteurs", answer: "projectors" },
+    { question: "les devoirs maison", answer: "take-home assignments" },
+    { question: "les projets", answer: "projects" },
+    { question: "les exposés", answer: "presentations" },
+    { question: "les rapports", answer: "reports" },
+    { question: "les discussions", answer: "discussions" },
+    { question: "les questions", answer: "questions" },
+    { question: "les réponses", answer: "answers" },
+    { question: "les langues", answer: "languages" },
+    { question: "les mathématiques", answer: "mathematics" },
+    { question: "les sciences", answer: "sciences" },
+    { question: "les histoires", answer: "histories / stories" },
+    { question: "les géographies", answer: "geographies" },
+    { question: "les arts", answer: "arts" },
+    { question: "les musiques", answer: "music (pl.)" },
+    { question: "les sports", answer: "sports" },
+    { question: "les résultats", answer: "results" },
+    { question: "les réussites", answer: "successes" },
+    { question: "les échecs", answer: "failures" },
+    { question: "les entreprises", answer: "companies" },
+    { question: "les usines", answer: "factories" },
+    { question: "les magasins", answer: "shops" },
+    { question: "les marchés", answer: "markets" },
+    { question: "les hôtels", answer: "hotels" },
+    { question: "les restaurants", answer: "restaurants" },
+    { question: "les cafés", answer: "cafés" },
+    { question: "les hôpitaux", answer: "hospitals" },
+    { question: "les administrations", answer: "administrations" },
+    { question: "les employés", answer: "employees (m.)" },
+    { question: "les employées", answer: "employees (f.)" },
+    { question: "les patrons", answer: "bosses (m.)" },
+    { question: "les patronnes", answer: "bosses (f.)" },
+    { question: "les collègues", answer: "colleagues" },
+    { question: "les clients", answer: "clients (m.)" },
+    { question: "les clientes", answer: "clients (f.)" },
+    { question: "les comptables", answer: "accountants" },
+    { question: "les ingénieurs", answer: "engineers" },
+    { question: "les médecins", answer: "doctors" },
+    { question: "les infirmiers", answer: "nurses (m.)" },
+    { question: "les infirmières", answer: "nurses (f.)" },
+    { question: "les ouvriers", answer: "workers (m.)" },
+    { question: "les ouvrières", answer: "workers (f.)" },
+    { question: "les serveurs", answer: "waiters" },
+    { question: "les serveuses", answer: "waitresses" },
+    { question: "les vendeurs", answer: "salesmen" },
+    { question: "les vendeuses", answer: "saleswomen" },
+    { question: "les policiers", answer: "policemen" },
+    { question: "les policières", answer: "policewomen" },
+    { question: "les pompiers", answer: "firefighters" },
+    { question: "les chauffeurs", answer: "drivers" },
+    { question: "les conducteurs", answer: "drivers (m.)" },
+    { question: "les conductrices", answer: "drivers (f.)" },
+    { question: "les coiffeurs", answer: "hairdressers (m.)" },
+    { question: "les coiffeuses", answer: "hairdressers (f.)" },
+    { question: "les boulangers", answer: "bakers (m.)" },
+    { question: "les boulangères", answer: "bakers (f.)" },
+    { question: "les bouchers", answer: "butchers (m.)" },
+    { question: "les bouchères", answer: "butchers (f.)" },
+    { question: "les caissiers", answer: "cashiers (m.)" },
+    { question: "les caissières", answer: "cashiers (f.)" },
+    { question: "les agriculteurs", answer: "farmers (m.)" },
+    { question: "les agricultrices", answer: "farmers (f.)" },
+    { question: "les patrons de café", answer: "café owners" },
+    { question: "les avocats", answer: "lawyers (m.)" },
+    { question: "les avocates", answer: "lawyers (f.)" },
+    { question: "les juges", answer: "judges" },
+    { question: "les journalistes", answer: "journalists" },
+    { question: "les photographes", answer: "photographers" },
+    { question: "les artistes", answer: "artists" },
+    { question: "les musiciens", answer: "musicians (m.)" },
+    { question: "les musiciennes", answer: "musicians (f.)" },
+    { question: "les écrivains", answer: "writers (m.)" },
+    { question: "les écrivaines", answer: "writers (f.)" },
+    { question: "les chanteurs", answer: "singers (m.)" },
+    { question: "les chanteuses", answer: "singers (f.)" },
+    { question: "les acteurs", answer: "actors (m.)" },
+    { question: "les actrices", answer: "actresses (f.)" },
+    { question: "les réalisateurs", answer: "directors (film) (m.)" },
+    { question: "les réalisatrices", answer: "directors (film) (f.)" },
+    { question: "les patrons d’entreprise", answer: "business owners" },
+    { question: "les employés de bureau", answer: "office workers" },
+    { question: "les stagiaires", answer: "interns" },
+    { question: "les réunions", answer: "meetings" },
+    { question: "les conférences", answer: "conferences" },
+    { question: "les formations", answer: "trainings" },
+    { question: "les stages", answer: "internships" },
+    { question: "les contrats", answer: "contracts" },
+    { question: "les salaires", answer: "salaries" },
+    { question: "les emplois", answer: "jobs" },
+    { question: "les métiers", answer: "professions" },
+    { question: "les carrières", answer: "careers" },
+    { question: "les horaires", answer: "schedules" }
+  ]
+},
+{
+  "title": "Nature & Places",
+  "icon": "fas fa-tree",
+  "questions": [
+    {
+      "question": "les villes",
+      "answer": "cities"
+    },
+    {
+      "question": "les villages",
+      "answer": "villages"
+    },
+    {
+      "question": "les campagnes",
+      "answer": "countrysides"
+    },
+    {
+      "question": "les rues",
+      "answer": "streets"
+    },
+    {
+      "question": "les avenues",
+      "answer": "avenues"
+    },
+    {
+      "question": "les boulevards",
+      "answer": "boulevards"
+    },
+    {
+      "question": "les routes",
+      "answer": "roads"
+    },
+    {
+      "question": "les chemins",
+      "answer": "paths"
+    },
+    {
+      "question": "les trottoirs",
+      "answer": "sidewalks"
+    },
+    {
+      "question": "les places",
+      "answer": "squares (public)"
+    },
+    {
+      "question": "les parcs",
+      "answer": "parks"
+    },
+    {
+      "question": "les jardins",
+      "answer": "gardens"
+    },
+    {
+      "question": "les forêts",
+      "answer": "forests"
+    },
+    {
+      "question": "les bois",
+      "answer": "woods"
+    },
+    {
+      "question": "les champs",
+      "answer": "fields"
+    },
+    {
+      "question": "les prairies",
+      "answer": "meadows"
+    },
+    {
+      "question": "les collines",
+      "answer": "hills"
+    },
+    {
+      "question": "les montagnes",
+      "answer": "mountains"
+    },
+    {
+      "question": "les vallées",
+      "answer": "valleys"
+    },
+    {
+      "question": "les rivières",
+      "answer": "rivers (small)"
+    },
+    {
+      "question": "les fleuves",
+      "answer": "rivers (big)"
+    },
+    {
+      "question": "les lacs",
+      "answer": "lakes"
+    },
+    {
+      "question": "les mers",
+      "answer": "seas"
+    },
+    {
+      "question": "les océans",
+      "answer": "oceans"
+    },
+    {
+      "question": "les plages",
+      "answer": "beaches"
+    },
+    {
+      "question": "les côtes",
+      "answer": "coasts"
+    },
+    {
+      "question": "les îles",
+      "answer": "islands"
+    },
+    {
+      "question": "les déserts",
+      "answer": "deserts"
+    },
+    {
+      "question": "les volcans",
+      "answer": "volcanoes"
+    },
+    {
+      "question": "les grottes",
+      "answer": "caves"
+    },
+    {
+      "question": "les cascades",
+      "answer": "waterfalls"
+    },
+    {
+      "question": "les rochers",
+      "answer": "rocks"
+    },
+    {
+      "question": "les pierres",
+      "answer": "stones"
+    },
+    {
+      "question": "les sables",
+      "answer": "sands"
+    },
+    {
+      "question": "les terres",
+      "answer": "lands / soils"
+    },
+    {
+      "question": "les sols",
+      "answer": "grounds"
+    },
+    {
+      "question": "les climats",
+      "answer": "climates"
+    },
+    {
+      "question": "les saisons",
+      "answer": "seasons"
+    },
+    {
+      "question": "les printemps",
+      "answer": "springs (season)"
+    },
+    {
+      "question": "les étés",
+      "answer": "summers"
+    },
+    {
+      "question": "les automnes",
+      "answer": "autumns"
+    },
+    {
+      "question": "les hivers",
+      "answer": "winters"
+    },
+    {
+      "question": "les vents",
+      "answer": "winds"
+    },
+    {
+      "question": "les pluies",
+      "answer": "rains"
+    },
+    {
+      "question": "les orages",
+      "answer": "storms"
+    },
+    {
+      "question": "les éclairs",
+      "answer": "lightning bolts"
+    },
+    {
+      "question": "les tonnerres",
+      "answer": "thunders"
+    },
+    {
+      "question": "les neiges",
+      "answer": "snows"
+    },
+    {
+      "question": "les glaces",
+      "answer": "ice / ices"
+    },
+    {
+      "question": "les brouillards",
+      "answer": "fogs"
+    },
+    {
+      "question": "les soleils",
+      "answer": "suns"
+    },
+    {
+      "question": "les lunes",
+      "answer": "moons"
+    },
+    {
+      "question": "les étoiles",
+      "answer": "stars"
+    },
+    {
+      "question": "les planètes",
+      "answer": "planets"
+    },
+    {
+      "question": "les ciels",
+      "answer": "skies"
+    },
+    {
+      "question": "les nuages",
+      "answer": "clouds"
+    },
+    {
+      "question": "les arcs-en-ciel",
+      "answer": "rainbows"
+    },
+    {
+      "question": "les fleurs",
+      "answer": "flowers"
+    },
+    {
+      "question": "les arbres",
+      "answer": "trees"
+    },
+    {
+      "question": "les feuilles",
+      "answer": "leaves"
+    },
+    {
+      "question": "les racines",
+      "answer": "roots"
+    },
+    {
+      "question": "les troncs",
+      "answer": "trunks"
+    },
+    {
+      "question": "les branches",
+      "answer": "branches"
+    },
+    {
+      "question": "les herbes",
+      "answer": "grasses"
+    },
+    {
+      "question": "les fruits",
+      "answer": "fruits"
+    },
+    {
+      "question": "les légumes",
+      "answer": "vegetables"
+    },
+    {
+      "question": "les céréales",
+      "answer": "cereals / grains"
+    },
+    {
+      "question": "les blés",
+      "answer": "wheats"
+    },
+    {
+      "question": "les riz",
+      "answer": "rices"
+    },
+    {
+      "question": "les maïs",
+      "answer": "corns"
+    },
+    {
+      "question": "les pommes",
+      "answer": "apples"
+    },
+    {
+      "question": "les poires",
+      "answer": "pears"
+    },
+    {
+      "question": "les pêches",
+      "answer": "peaches"
+    },
+    {
+      "question": "les abricots",
+      "answer": "apricots"
+    },
+    {
+      "question": "les cerises",
+      "answer": "cherries"
+    },
+    {
+      "question": "les fraises",
+      "answer": "strawberries"
+    },
+    {
+      "question": "les framboises",
+      "answer": "raspberries"
+    },
+    {
+      "question": "les oranges",
+      "answer": "oranges"
+    },
+    {
+      "question": "les citrons",
+      "answer": "lemons"
+    },
+    {
+      "question": "les bananes",
+      "answer": "bananas"
+    },
+    {
+      "question": "les raisins",
+      "answer": "grapes"
+    },
+    {
+      "question": "les pastèques",
+      "answer": "watermelons"
+    },
+    {
+      "question": "les melons",
+      "answer": "melons"
+    },
+    {
+      "question": "les ananas",
+      "answer": "pineapples"
+    },
+    {
+      "question": "les tomates",
+      "answer": "tomatoes"
+    },
+    {
+      "question": "les carottes",
+      "answer": "carrots"
+    },
+    {
+      "question": "les pommes de terre",
+      "answer": "potatoes"
+    },
+    {
+      "question": "les oignons",
+      "answer": "onions"
+    },
+    {
+      "question": "les champignons",
+      "answer": "mushrooms"
+    },
+    {
+      "question": "les laitues",
+      "answer": "lettuces"
+    },
+    {
+      "question": "les choux",
+      "answer": "cabbages"
+    },
+    {
+      "question": "les haricots",
+      "answer": "beans"
+    },
+    {
+      "question": "les petits pois",
+      "answer": "peas"
+    },
+    {
+      "question": "les courgettes",
+      "answer": "zucchinis"
+    },
+    {
+      "question": "les aubergines",
+      "answer": "eggplants"
+    },
+    {
+      "question": "les poivrons",
+      "answer": "peppers"
+    },
+    {
+      "question": "les animaux",
+      "answer": "animals"
+    },
+    {
+      "question": "les chiens",
+      "answer": "dogs"
+    },
+    {
+      "question": "les chats",
+      "answer": "cats"
+    },
+    {
+      "question": "les oiseaux",
+      "answer": "birds"
+    },
+    {
+      "question": "les poissons",
+      "answer": "fish"
+    },
+    {
+      "question": "les chevaux",
+      "answer": "horses"
+    },
+    {
+      "question": "les vaches",
+      "answer": "cows"
+    },
+    {
+      "question": "les moutons",
+      "answer": "sheep"
+    },
+    {
+      "question": "les chèvres",
+      "answer": "goats"
+    },
+    {
+      "question": "les cochons",
+      "answer": "pigs"
+    },
+    {
+      "question": "les poules",
+      "answer": "hens"
+    },
+    {
+      "question": "les canards",
+      "answer": "ducks"
+    },
+    {
+      "question": "les oies",
+      "answer": "geese"
+    },
+    {
+      "question": "les lapins",
+      "answer": "rabbits"
+    },
+    {
+      "question": "les souris",
+      "answer": "mice"
+    },
+    {
+      "question": "les rats",
+      "answer": "rats"
+    },
+    {
+      "question": "les serpents",
+      "answer": "snakes"
+    },
+    {
+      "question": "les grenouilles",
+      "answer": "frogs"
+    },
+    {
+      "question": "les insectes",
+      "answer": "insects"
+    },
+    {
+      "question": "les abeilles",
+      "answer": "bees"
+    },
+    {
+      "question": "les mouches",
+      "answer": "flies"
+    },
+    {
+      "question": "les moustiques",
+      "answer": "mosquitoes"
+    },
+    {
+      "question": "les fourmis",
+      "answer": "ants"
+    },
+    {
+      "question": "les papillons",
+      "answer": "butterflies"
+    },
+    {
+      "question": "les araignées",
+      "answer": "spiders"
+    },
+    {
+      "question": "les lions",
+      "answer": "lions"
+    },
+    {
+      "question": "les tigres",
+      "answer": "tigers"
+    },
+    {
+      "question": "les éléphants",
+      "answer": "elephants"
+    },
+    {
+      "question": "les singes",
+      "answer": "monkeys"
+    },
+    {
+      "question": "les girafes",
+      "answer": "giraffes"
+    },
+    {
+      "question": "les ours",
+      "answer": "bears"
+    },
+    {
+      "question": "les loups",
+      "answer": "wolves"
+    },
+    {
+      "question": "les renards",
+      "answer": "foxes"
+    },
+    {
+      "question": "les cochons sauvages",
+      "answer": "wild boars"
+    },
+    {
+      "question": "les dauphins",
+      "answer": "dolphins"
+    },
+    {
+      "question": "les baleines",
+      "answer": "whales"
+    },
+    {
+      "question": "les requins",
+      "answer": "sharks"
+    },
+    {
+      "question": "les méduses",
+      "answer": "jellyfish"
+    },
+    {
+      "question": "les crabes",
+      "answer": "crabs"
+    },
+    {
+      "question": "les crevettes",
+      "answer": "shrimps"
+    },
+    {
+      "question": "les coquillages",
+      "answer": "seashells"
+    },
+    {
+      "question": "les huîtres",
+      "answer": "oysters"
+    },
+    {
+      "question": "les moules",
+      "answer": "mussels"
+    },
+    {
+      "question": "les escargots",
+      "answer": "snails"
+    },
+    {
+      "question": "les pingouins",
+      "answer": "penguins"
+    },
+    {
+      "question": "les aigles",
+      "answer": "eagles"
+    },
+    {
+      "question": "les chouettes",
+      "answer": "owls"
+    },
+    {
+      "question": "les corbeaux",
+      "answer": "crows"
+    },
+    {
+      "question": "les perroquets",
+      "answer": "parrots"
+    },
+    {
+      "question": "les autruches",
+      "answer": "ostriches"
+    },
+    {
+      "question": "les flamants roses",
+      "answer": "flamingos"
+    },
+    {
+      "question": "les chameaux",
+      "answer": "camels"
+    },
+    {
+      "question": "les kangourous",
+      "answer": "kangaroos"
+    },
+    {
+      "question": "les pandas",
+      "answer": "pandas"
+    }
+  ]
+},
+{
+  "title": "Travel & Transport",
+  "icon": "fas fa-plane",
+  "questions": [
+    {
+      "question": "les voyages",
+      "answer": "trips / travels"
+    },
+    {
+      "question": "les vacances",
+      "answer": "holidays / vacations"
+    },
+    {
+      "question": "les destinations",
+      "answer": "destinations"
+    },
+    {
+      "question": "les pays",
+      "answer": "countries"
+    },
+    {
+      "question": "les villes",
+      "answer": "cities"
+    },
+    {
+      "question": "les capitales",
+      "answer": "capitals"
+    },
+    {
+      "question": "les régions",
+      "answer": "regions"
+    },
+    {
+      "question": "les cartes",
+      "answer": "maps"
+    },
+    {
+      "question": "les plans",
+      "answer": "plans / maps of towns"
+    },
+    {
+      "question": "les guides",
+      "answer": "guidebooks"
+    },
+    {
+      "question": "les hôtels",
+      "answer": "hotels"
+    },
+    {
+      "question": "les auberges",
+      "answer": "inns / hostels"
+    },
+    {
+      "question": "les campings",
+      "answer": "campsites"
+    },
+    {
+      "question": "les chambres d’hôtel",
+      "answer": "hotel rooms"
+    },
+    {
+      "question": "les réservations",
+      "answer": "reservations"
+    },
+    {
+      "question": "les clés",
+      "answer": "keys"
+    },
+    {
+      "question": "les bagages",
+      "answer": "luggage"
+    },
+    {
+      "question": "les valises",
+      "answer": "suitcases"
+    },
+    {
+      "question": "les sacs",
+      "answer": "bags"
+    },
+    {
+      "question": "les passeports",
+      "answer": "passports"
+    },
+    {
+      "question": "les billets",
+      "answer": "tickets"
+    },
+    {
+      "question": "les cartes d’embarquement",
+      "answer": "boarding passes"
+    },
+    {
+      "question": "les visas",
+      "answer": "visas"
+    },
+    {
+      "question": "les douanes",
+      "answer": "customs"
+    },
+    {
+      "question": "les contrôles de sécurité",
+      "answer": "security checks"
+    },
+    {
+      "question": "les terminaux",
+      "answer": "terminals"
+    },
+    {
+      "question": "les aéroports",
+      "answer": "airports"
+    },
+    {
+      "question": "les avions",
+      "answer": "airplanes"
+    },
+    {
+      "question": "les vols",
+      "answer": "flights"
+    },
+    {
+      "question": "les départs",
+      "answer": "departures"
+    },
+    {
+      "question": "les arrivées",
+      "answer": "arrivals"
+    },
+    {
+      "question": "les compagnies aériennes",
+      "answer": "airlines"
+    },
+    {
+      "question": "les trains",
+      "answer": "trains"
+    },
+    {
+      "question": "les gares",
+      "answer": "train stations"
+    },
+    {
+      "question": "les quais",
+      "answer": "platforms"
+    },
+    {
+      "question": "les wagons",
+      "answer": "train cars"
+    },
+    {
+      "question": "les locomotives",
+      "answer": "locomotives"
+    },
+    {
+      "question": "les billets de train",
+      "answer": "train tickets"
+    },
+    {
+      "question": "les horaires",
+      "answer": "timetables"
+    },
+    {
+      "question": "les métros",
+      "answer": "subways"
+    },
+    {
+      "question": "les stations",
+      "answer": "stations"
+    },
+    {
+      "question": "les bus",
+      "answer": "buses"
+    },
+    {
+      "question": "les arrêts de bus",
+      "answer": "bus stops"
+    },
+    {
+      "question": "les autocars",
+      "answer": "coaches"
+    },
+    {
+      "question": "les taxis",
+      "answer": "taxis"
+    },
+    {
+      "question": "les chauffeurs de taxi",
+      "answer": "taxi drivers"
+    },
+    {
+      "question": "les voitures",
+      "answer": "cars"
+    },
+    {
+      "question": "les camions",
+      "answer": "trucks"
+    },
+    {
+      "question": "les motos",
+      "answer": "motorcycles"
+    },
+    {
+      "question": "les scooters",
+      "answer": "scooters"
+    },
+    {
+      "question": "les vélos",
+      "answer": "bicycles"
+    },
+    {
+      "question": "les pistes cyclables",
+      "answer": "bike lanes"
+    },
+    {
+      "question": "les routes",
+      "answer": "roads"
+    },
+    {
+      "question": "les autoroutes",
+      "answer": "highways"
+    },
+    {
+      "question": "les sorties",
+      "answer": "exits"
+    },
+    {
+      "question": "les entrées",
+      "answer": "entrances"
+    },
+    {
+      "question": "les carrefours",
+      "answer": "crossroads"
+    },
+    {
+      "question": "les ronds-points",
+      "answer": "roundabouts"
+    },
+    {
+      "question": "les feux rouges",
+      "answer": "traffic lights"
+    },
+    {
+      "question": "les panneaux",
+      "answer": "signs"
+    },
+    {
+      "question": "les stations-service",
+      "answer": "gas stations"
+    },
+    {
+      "question": "les parkings",
+      "answer": "parking lots"
+    },
+    {
+      "question": "les garages",
+      "answer": "garages"
+    },
+    {
+      "question": "les permis de conduire",
+      "answer": "driving licenses"
+    },
+    {
+      "question": "les accidents",
+      "answer": "accidents"
+    },
+    {
+      "question": "les embouteillages",
+      "answer": "traffic jams"
+    },
+    {
+      "question": "les bateaux",
+      "answer": "boats"
+    },
+    {
+      "question": "les navires",
+      "answer": "ships"
+    },
+    {
+      "question": "les ferries",
+      "answer": "ferries"
+    },
+    {
+      "question": "les ports",
+      "answer": "ports"
+    },
+    {
+      "question": "les quais",
+      "answer": "docks"
+    },
+    {
+      "question": "les croisières",
+      "answer": "cruises"
+    },
+    {
+      "question": "les voiliers",
+      "answer": "sailboats"
+    },
+    {
+      "question": "les canoës",
+      "answer": "canoes"
+    },
+    {
+      "question": "les kayaks",
+      "answer": "kayaks"
+    },
+    {
+      "question": "les yachts",
+      "answer": "yachts"
+    },
+    {
+      "question": "les phares",
+      "answer": "lighthouses"
+    },
+    {
+      "question": "les marins",
+      "answer": "sailors"
+    },
+    {
+      "question": "les capitaines",
+      "answer": "captains"
+    },
+    {
+      "question": "les ports de plaisance",
+      "answer": "marinas"
+    },
+    {
+      "question": "les voyages d’affaires",
+      "answer": "business trips"
+    },
+    {
+      "question": "les excursions",
+      "answer": "excursions"
+    },
+    {
+      "question": "les sorties",
+      "answer": "outings"
+    },
+    {
+      "question": "les visites guidées",
+      "answer": "guided tours"
+    },
+    {
+      "question": "les monuments",
+      "answer": "monuments"
+    },
+    {
+      "question": "les musées",
+      "answer": "museums"
+    },
+    {
+      "question": "les châteaux",
+      "answer": "castles"
+    },
+    {
+      "question": "les églises",
+      "answer": "churches"
+    },
+    {
+      "question": "les cathédrales",
+      "answer": "cathedrals"
+    },
+    {
+      "question": "les temples",
+      "answer": "temples"
+    },
+    {
+      "question": "les mosquées",
+      "answer": "mosques"
+    },
+    {
+      "question": "les synagogues",
+      "answer": "synagogues"
+    },
+    {
+      "question": "les ponts",
+      "answer": "bridges"
+    },
+    {
+      "question": "les tunnels",
+      "answer": "tunnels"
+    },
+    {
+      "question": "les tours",
+      "answer": "towers"
+    },
+    {
+      "question": "les gratte-ciel",
+      "answer": "skyscrapers"
+    },
+    {
+      "question": "les places",
+      "answer": "squares"
+    },
+    {
+      "question": "les marchés",
+      "answer": "markets"
+    },
+    {
+      "question": "les magasins",
+      "answer": "shops"
+    },
+    {
+      "question": "les centres commerciaux",
+      "answer": "shopping centers"
+    },
+    {
+      "question": "les cinémas",
+      "answer": "cinemas"
+    },
+    {
+      "question": "les théâtres",
+      "answer": "theaters"
+    },
+    {
+      "question": "les stades",
+      "answer": "stadiums"
+    },
+    {
+      "question": "les piscines",
+      "answer": "swimming pools"
+    },
+    {
+      "question": "les plages",
+      "answer": "beaches"
+    },
+    {
+      "question": "les stations de ski",
+      "answer": "ski resorts"
+    },
+    {
+      "question": "les stations balnéaires",
+      "answer": "seaside resorts"
+    },
+    {
+      "question": "les auberges de jeunesse",
+      "answer": "youth hostels"
+    },
+    {
+      "question": "les restaurants",
+      "answer": "restaurants"
+    },
+    {
+      "question": "les cafés",
+      "answer": "cafés"
+    },
+    {
+      "question": "les bars",
+      "answer": "bars"
+    },
+    {
+      "question": "les boîtes de nuit",
+      "answer": "nightclubs"
+    },
+    {
+      "question": "les festivals",
+      "answer": "festivals"
+    },
+    {
+      "question": "les événements",
+      "answer": "events"
+    },
+    {
+      "question": "les billets d’entrée",
+      "answer": "entrance tickets"
+    },
+    {
+      "question": "les files d’attente",
+      "answer": "queues / waiting lines"
+    },
+    {
+      "question": "les fouilles de sécurité",
+      "answer": "security checks"
+    },
+    {
+      "question": "les visiteurs",
+      "answer": "visitors (m.)"
+    },
+    {
+      "question": "les visiteuses",
+      "answer": "visitors (f.)"
+    },
+    {
+      "question": "les guides touristiques",
+      "answer": "tour guides"
+    }
+  ]
+},
+{
+  "title": "Health, Body & Time",
+  "icon": "fas fa-cloud",
+  "questions": [
+    {
+      "question": "la santé",
+      "answer": "health"
+    },
+    {
+      "question": "le corps",
+      "answer": "body"
+    },
+    {
+      "question": "la tête",
+      "answer": "head"
+    },
+    {
+      "question": "les cheveux",
+      "answer": "hair"
+    },
+    {
+      "question": "le visage",
+      "answer": "face"
+    },
+    {
+      "question": "les yeux",
+      "answer": "eyes"
+    },
+    {
+      "question": "le nez",
+      "answer": "nose"
+    },
+    {
+      "question": "la bouche",
+      "answer": "mouth"
+    },
+    {
+      "question": "les dents",
+      "answer": "teeth"
+    },
+    {
+      "question": "la langue",
+      "answer": "tongue"
+    },
+    {
+      "question": "les oreilles",
+      "answer": "ears"
+    },
+    {
+      "question": "le cou",
+      "answer": "neck"
+    },
+    {
+      "question": "les épaules",
+      "answer": "shoulders"
+    },
+    {
+      "question": "les bras",
+      "answer": "arms"
+    },
+    {
+      "question": "les mains",
+      "answer": "hands"
+    },
+    {
+      "question": "les doigts",
+      "answer": "fingers"
+    },
+    {
+      "question": "la poitrine",
+      "answer": "chest"
+    },
+    {
+      "question": "le dos",
+      "answer": "back"
+    },
+    {
+      "question": "le ventre",
+      "answer": "stomach"
+    },
+    {
+      "question": "la jambe",
+      "answer": "leg"
+    },
+    {
+      "question": "les genoux",
+      "answer": "knees"
+    },
+    {
+      "question": "les pieds",
+      "answer": "feet"
+    },
+    {
+      "question": "les orteils",
+      "answer": "toes"
+    },
+    {
+      "question": "la peau",
+      "answer": "skin"
+    },
+    {
+      "question": "les os",
+      "answer": "bones"
+    },
+    {
+      "question": "le sang",
+      "answer": "blood"
+    },
+    {
+      "question": "le cœur",
+      "answer": "heart"
+    },
+    {
+      "question": "le cerveau",
+      "answer": "brain"
+    },
+    {
+      "question": "les poumons",
+      "answer": "lungs"
+    },
+    {
+      "question": "le foie",
+      "answer": "liver"
+    },
+    {
+      "question": "les reins",
+      "answer": "kidneys"
+    },
+    {
+      "question": "les maladies",
+      "answer": "illnesses"
+    },
+    {
+      "question": "la fièvre",
+      "answer": "fever"
+    },
+    {
+      "question": "le rhume",
+      "answer": "cold"
+    },
+    {
+      "question": "la toux",
+      "answer": "cough"
+    },
+    {
+      "question": "la douleur",
+      "answer": "pain"
+    },
+    {
+      "question": "la fatigue",
+      "answer": "fatigue"
+    },
+    {
+      "question": "le temps",
+      "answer": "time"
+    },
+    {
+      "question": "les heures",
+      "answer": "hours"
+    },
+    {
+      "question": "les minutes",
+      "answer": "minutes"
+    },
+    {
+      "question": "les secondes",
+      "answer": "seconds"
+    },
+    {
+      "question": "le matin",
+      "answer": "morning"
+    },
+    {
+      "question": "l'après-midi",
+      "answer": "afternoon"
+    },
+    {
+      "question": "le soir",
+      "answer": "evening"
+    },
+    {
+      "question": "la nuit",
+      "answer": "night"
+    },
+    {
+      "question": "les jours",
+      "answer": "days"
+    },
+    {
+      "question": "lundi",
+      "answer": "Monday"
+    },
+    {
+      "question": "mardi",
+      "answer": "Tuesday"
+    },
+    {
+      "question": "mercredi",
+      "answer": "Wednesday"
+    },
+    {
+      "question": "jeudi",
+      "answer": "Thursday"
+    },
+    {
+      "question": "vendredi",
+      "answer": "Friday"
+    },
+    {
+      "question": "samedi",
+      "answer": "Saturday"
+    },
+    {
+      "question": "dimanche",
+      "answer": "Sunday"
+    },
+    {
+      "question": "les semaines",
+      "answer": "weeks"
+    },
+    {
+      "question": "les mois",
+      "answer": "months"
+    },
+    {
+      "question": "janvier",
+      "answer": "January"
+    },
+    {
+      "question": "février",
+      "answer": "February"
+    },
+    {
+      "question": "mars",
+      "answer": "March"
+    },
+    {
+      "question": "avril",
+      "answer": "April"
+    },
+    {
+      "question": "mai",
+      "answer": "May"
+    },
+    {
+      "question": "juin",
+      "answer": "June"
+    },
+    {
+      "question": "juillet",
+      "answer": "July"
+    },
+    {
+      "question": "août",
+      "answer": "August"
+    },
+    {
+      "question": "septembre",
+      "answer": "September"
+    },
+    {
+      "question": "octobre",
+      "answer": "October"
+    },
+    {
+      "question": "novembre",
+      "answer": "November"
+    },
+    {
+      "question": "décembre",
+      "answer": "December"
+    },
+    {
+      "question": "les années",
+      "answer": "years"
+    },
+    {
+      "question": "les couleurs",
+      "answer": "colors"
+    },
+    {
+      "question": "le blanc",
+      "answer": "white"
+    },
+    {
+      "question": "le noir",
+      "answer": "black"
+    },
+    {
+      "question": "le gris",
+      "answer": "grey"
+    },
+    {
+      "question": "le rouge",
+      "answer": "red"
+    },
+    {
+      "question": "le bleu",
+      "answer": "blue"
+    },
+    {
+      "question": "le vert",
+      "answer": "green"
+    },
+    {
+      "question": "le jaune",
+      "answer": "yellow"
+    },
+    {
+      "question": "l'orange",
+      "answer": "orange"
+    },
+    {
+      "question": "le violet",
+      "answer": "purple"
+    },
+    {
+      "question": "le rose",
+      "answer": "pink"
+    },
+    {
+      "question": "le marron",
+      "answer": "brown"
+    },
+    {
+      "question": "l'argenté",
+      "answer": "silver"
+    },
+    {
+      "question": "le doré",
+      "answer": "gold"
+    },
+    {
+      "question": "la lumière",
+      "answer": "light"
+    },
+    {
+      "question": "l'ombre",
+      "answer": "shadow"
+    },
+    {
+      "question": "les sens",
+      "answer": "senses"
+    },
+    {
+      "question": "la vue",
+      "answer": "sight"
+    },
+    {
+      "question": "l'ouïe",
+      "answer": "hearing"
+    },
+    {
+      "question": "l'odorat",
+      "answer": "smell"
+    },
+    {
+      "question": "le goût",
+      "answer": "taste"
+    },
+    {
+      "question": "le toucher",
+      "answer": "touch"
+    }
+  ]
+},
+{
+  "title": "Adjectives",
+  "icon": "fas fa-sad-cry",
+  "questions": [
+    {
+      "question": "grand",
+      "answer": "tall, big (m.)"
+    },
+    {
+      "question": "grande",
+      "answer": "tall, big (f.)"
+    },
+    {
+      "question": "petit",
+      "answer": "small (m.)"
+    },
+    {
+      "question": "petite",
+      "answer": "small (f.)"
+    },
+    {
+      "question": "beau",
+      "answer": "beautiful, handsome (m.)"
+    },
+    {
+      "question": "belle",
+      "answer": "beautiful (f.)"
+    },
+    {
+      "question": "bon",
+      "answer": "good (m.)"
+    },
+    {
+      "question": "bonne",
+      "answer": "good (f.)"
+    },
+    {
+      "question": "mauvais",
+      "answer": "bad (m.)"
+    },
+    {
+      "question": "mauvaise",
+      "answer": "bad (f.)"
+    },
+    {
+      "question": "vieux",
+      "answer": "old (m.)"
+    },
+    {
+      "question": "vieil",
+      "answer": "old (m., before vowel)"
+    },
+    {
+      "question": "vieille",
+      "answer": "old (f.)"
+    },
+    {
+      "question": "jeune",
+      "answer": "young (m./f.)"
+    },
+    {
+      "question": "nouveau",
+      "answer": "new (m.)"
+    },
+    {
+      "question": "nouvel",
+      "answer": "new (m., before vowel)"
+    },
+    {
+      "question": "nouvelle",
+      "answer": "new (f.)"
+    },
+    {
+      "question": "gros",
+      "answer": "fat (m.)"
+    },
+    {
+      "question": "grosse",
+      "answer": "fat (f.)"
+    },
+    {
+      "question": "mince",
+      "answer": "thin (m./f.)"
+    },
+    {
+      "question": "génial",
+      "answer": "great (m.)"
+    },
+    {
+      "question": "géniale",
+      "answer": "great (f.)"
+    },
+    {
+      "question": "facile",
+      "answer": "easy (m./f.)"
+    },
+    {
+      "question": "difficile",
+      "answer": "difficult (m./f.)"
+    },
+    {
+      "question": "court",
+      "answer": "short (m.)"
+    },
+    {
+      "question": "courte",
+      "answer": "short (f.)"
+    },
+    {
+      "question": "long",
+      "answer": "long (m.)"
+    },
+    {
+      "question": "longue",
+      "answer": "long (f.)"
+    },
+    {
+      "question": "riche",
+      "answer": "rich (m./f.)"
+    },
+    {
+      "question": "pauvre",
+      "answer": "poor (m./f.)"
+    },
+    {
+      "question": "chaud",
+      "answer": "hot (m.)"
+    },
+    {
+      "question": "chaude",
+      "answer": "hot (f.)"
+    },
+    {
+      "question": "froid",
+      "answer": "cold (m.)"
+    },
+    {
+      "question": "froide",
+      "answer": "cold (f.)"
+    },
+    {
+      "question": "doux",
+      "answer": "sweet, soft (m.)"
+    },
+    {
+      "question": "douce",
+      "answer": "sweet, soft (f.)"
+    },
+    {
+      "question": "amer",
+      "answer": "bitter (m.)"
+    },
+    {
+      "question": "amère",
+      "answer": "bitter (f.)"
+    },
+    {
+      "question": "salé",
+      "answer": "salty (m.)"
+    },
+    {
+      "question": "salée",
+      "answer": "salty (f.)"
+    },
+    {
+      "question": "sucré",
+      "answer": "sugary, sweet (m.)"
+    },
+    {
+      "question": "sucrée",
+      "answer": "sugary, sweet (f.)"
+    },
+    {
+      "question": "clair",
+      "answer": "light, clear (m.)"
+    },
+    {
+      "question": "claire",
+      "answer": "light, clear (f.)"
+    },
+    {
+      "question": "foncé",
+      "answer": "dark (m.)"
+    },
+    {
+      "question": "foncée",
+      "answer": "dark (f.)"
+    },
+    {
+      "question": "léger",
+      "answer": "lightweight (m.)"
+    },
+    {
+      "question": "légère",
+      "answer": "lightweight (f.)"
+    },
+    {
+      "question": "lourd",
+      "answer": "heavy (m.)"
+    },
+    {
+      "question": "lourde",
+      "answer": "heavy (f.)"
+    },
+    {
+      "question": "simple",
+      "answer": "simple (m./f.)"
+    },
+    {
+      "question": "complexe",
+      "answer": "complex (m./f.)"
+    },
+    {
+      "question": "pratique",
+      "answer": "practical (m./f.)"
+    },
+    {
+      "question": "théorique",
+      "answer": "theoretical (m./f.)"
+    },
+    {
+      "question": "important",
+      "answer": "important (m.)"
+    },
+    {
+      "question": "importante",
+      "answer": "important (f.)"
+    },
+    {
+      "question": "différent",
+      "answer": "different (m.)"
+    },
+    {
+      "question": "différente",
+      "answer": "different (f.)"
+    },
+    {
+      "question": "pareil",
+      "answer": "same (m.)"
+    },
+    {
+      "question": "pareille",
+      "answer": "same (f.)"
+    },
+    {
+      "question": "nouveau",
+      "answer": "new (m.)"
+    },
+    {
+      "question": "nouvel",
+      "answer": "new (m. before a vowel)"
+    },
+    {
+      "question": "nouvelle",
+      "answer": "new (f.)"
+    },
+    {
+      "question": "ancien",
+      "answer": "ancient, former (m.)"
+    },
+    {
+      "question": "ancienne",
+      "answer": "ancient, former (f.)"
+    },
+    {
+      "question": "heureux",
+      "answer": "happy (m.)"
+    },
+    {
+      "question": "heureuse",
+      "answer": "happy (f.)"
+    },
+    {
+      "question": "triste",
+      "answer": "sad (m./f.)"
+    },
+    {
+      "question": "content",
+      "answer": "content, happy (m.)"
+    },
+    {
+      "question": "contente",
+      "answer": "content, happy (f.)"
+    },
+    {
+      "question": "fâché",
+      "answer": "angry (m.)"
+    },
+    {
+      "question": "fâchée",
+      "answer": "angry (f.)"
+    },
+    {
+      "question": "intelligent",
+      "answer": "intelligent (m.)"
+    },
+    {
+      "question": "intelligente",
+      "answer": "intelligent (f.)"
+    },
+    {
+      "question": "bête",
+      "answer": "silly, dumb (m./f.)"
+    },
+    {
+      "question": "gentil",
+      "answer": "kind (m.)"
+    },
+    {
+      "question": "gentille",
+      "answer": "kind (f.)"
+    },
+    {
+      "question": "méchant",
+      "answer": "mean, nasty (m.)"
+    },
+    {
+      "question": "méchante",
+      "answer": "mean, nasty (f.)"
+    },
+    {
+      "question": "sérieux",
+      "answer": "serious (m.)"
+    },
+    {
+      "question": "sérieuse",
+      "answer": "serious (f.)"
+    },
+    {
+      "question": "drôle",
+      "answer": "funny (m./f.)"
+    },
+    {
+      "question": "célèbre",
+      "answer": "famous (m./f.)"
+    },
+    {
+      "question": "inconnu",
+      "answer": "unknown (m.)"
+    },
+    {
+      "question": "inconnue",
+      "answer": "unknown (f.)"
+    },
+    {
+      "question": "occupé",
+      "answer": "busy (m.)"
+    },
+    {
+      "question": "occupée",
+      "answer": "busy (f.)"
+    },
+    {
+      "question": "libre",
+      "answer": "free (m./f.)"
+    },
+    {
+      "question": "seul",
+      "answer": "alone (m.)"
+    },
+    {
+      "question": "seule",
+      "answer": "alone (f.)"
+    },
+    {
+      "question": "marié",
+      "answer": "married (m.)"
+    },
+    {
+      "question": "mariée",
+      "answer": "married (f.)"
+    },
+    {
+      "question": "célibataire",
+      "answer": "single (m./f.)"
+    },
+    {
+      "question": "fatigué",
+      "answer": "tired (m.)"
+    },
+    {
+      "question": "fatiguée",
+      "answer": "tired (f.)"
+    },
+    {
+      "question": "énervé",
+      "answer": "annoyed (m.)"
+    },
+    {
+      "question": "énervée",
+      "answer": "annoyed (f.)"
+    },
+    {
+      "question": "étonné",
+      "answer": "surprised (m.)"
+    },
+    {
+      "question": "étonnée",
+      "answer": "surprised (f.)"
+    },
+    {
+      "question": "intéressant",
+      "answer": "interesting (m.)"
+    },
+    {
+      "question": "intéressante",
+      "answer": "interesting (f.)"
+    },
+    {
+      "question": "ennuyeux",
+      "answer": "boring (m.)"
+    },
+    {
+      "question": "ennuyeuse",
+      "answer": "boring (f.)"
+    },
+    {
+      "question": "calme",
+      "answer": "calm (m./f.)"
+    },
+    {
+      "question": "bruyant",
+      "answer": "noisy (m.)"
+    },
+    {
+      "question": "bruyante",
+      "answer": "noisy (f.)"
+    },
+    {
+      "question": "propre",
+      "answer": "clean (m./f.)"
+    },
+    {
+      "question": "sale",
+      "answer": "dirty (m./f.)"
+    },
+    {
+      "question": "fort",
+      "answer": "strong (m.)"
+    },
+    {
+      "question": "forte",
+      "answer": "strong (f.)"
+    },
+    {
+      "question": "faible",
+      "answer": "weak (m./f.)"
+    },
+    {
+      "question": "plein",
+      "answer": "full (m.)"
+    },
+    {
+      "question": "pleine",
+      "answer": "full (f.)"
+    },
+    {
+      "question": "vide",
+      "answer": "empty (m./f.)"
+    },
+    {
+      "question": "haut",
+      "answer": "high (m.)"
+    },
+    {
+      "question": "haute",
+      "answer": "high (f.)"
+    },
+    {
+      "question": "bas",
+      "answer": "low (m.)"
+    },
+    {
+      "question": "basse",
+      "answer": "low (f.)"
+    },
+    {
+      "question": "profond",
+      "answer": "deep (m.)"
+    },
+    {
+      "question": "profonde",
+      "answer": "deep (f.)"
+    },
+    {
+      "question": "superficiel",
+      "answer": "superficial (m.)"
+    },
+    {
+      "question": "superficielle",
+      "answer": "superficial (f.)"
+    },
+    {
+      "question": "large",
+      "answer": "wide (m./f.)"
+    },
+    {
+      "question": "étroit",
+      "answer": "narrow (m.)"
+    },
+    {
+      "question": "étroite",
+      "answer": "narrow (f.)"
+    },
+    {
+      "question": "plat",
+      "answer": "flat (m.)"
+    },
+    {
+      "question": "plate",
+      "answer": "flat (f.)"
+    },
+    {
+      "question": "rond",
+      "answer": "round (m.)"
+    },
+    {
+      "question": "ronde",
+      "answer": "round (f.)"
+    },
+    {
+      "question": "carré",
+      "answer": "square (m.)"
+    },
+    {
+      "question": "carrée",
+      "answer": "square (f.)"
+    },
+    {
+      "question": "pointu",
+      "answer": "pointed (m.)"
+    },
+    {
+      "question": "pointue",
+      "answer": "pointed (f.)"
+    },
+    {
+      "question": "sec",
+      "answer": "dry (m.)"
+    },
+    {
+      "question": "sèche",
+      "answer": "dry (f.)"
+    },
+    {
+      "question": "mouillé",
+      "answer": "wet (m.)"
+    },
+    {
+      "question": "mouillée",
+      "answer": "wet (f.)"
+    },
+    {
+      "question": "vivant",
+      "answer": "alive (m.)"
+    },
+    {
+      "question": "vivante",
+      "answer": "alive (f.)"
+    },
+    {
+      "question": "mort",
+      "answer": "dead (m.)"
+    },
+    {
+      "question": "morte",
+      "answer": "dead (f.)"
+    },
+    {
+      "question": "rapide",
+      "answer": "fast (m./f.)"
+    },
+    {
+      "question": "lent",
+      "answer": "slow (m.)"
+    },
+    {
+      "question": "lente",
+      "answer": "slow (f.)"
+    },
+    {
+      "question": "vrai",
+      "answer": "true (m.)"
+    },
+    {
+      "question": "vraie",
+      "answer": "true (f.)"
+    },
+    {
+      "question": "faux",
+      "answer": "false (m.)"
+    },
+    {
+      "question": "fausse",
+      "answer": "false (f.)"
+    },
+    {
+      "question": "facile",
+      "answer": "easy (m./f.)"
+    },
+    {
+      "question": "difficile",
+      "answer": "difficult (m./f.)"
+    },
+    {
+      "question": "cher",
+      "answer": "expensive (m.)"
+    },
+    {
+      "question": "chère",
+      "answer": "expensive (f.)"
+    },
+    {
+      "question": "bon marché",
+      "answer": "cheap (m./f.)"
+    },
+    {
+      "question": "clair",
+      "answer": "clear (m.)"
+    },
+    {
+      "question": "claire",
+      "answer": "clear (f.)"
+    },
+    {
+      "question": "obscur",
+      "answer": "dark, obscure (m.)"
+    },
+    {
+      "question": "obscure",
+      "answer": "dark, obscure (f.)"
+    },
+    {
+      "question": "neuf",
+      "answer": "brand new (m.)"
+    },
+    {
+      "question": "neuve",
+      "answer": "brand new (f.)"
+    },
+    {
+      "question": "usagé",
+      "answer": "used (m.)"
+    },
+    {
+      "question": "usagée",
+      "answer": "used (f.)"
+    },
+    {
+      "question": "pénible",
+      "answer": "painful, tiresome (m./f.)"
+    },
+    {
+      "question": "agréable",
+      "answer": "pleasant (m./f.)"
+    },
+    {
+      "question": "désagréable",
+      "answer": "unpleasant (m./f.)"
+    },
+    {
+      "question": "juste",
+      "answer": "fair, just, right (m./f.)"
+    },
+    {
+      "question": "injuste",
+      "answer": "unfair, unjust (m./f.)"
+    },
+    {
+      "question": "possible",
+      "answer": "possible (m./f.)"
+    },
+    {
+      "question": "impossible",
+      "answer": "impossible (m./f.)"
+    },
+    {
+      "question": "incroyable",
+      "answer": "incredible (m./f.)"
+    },
+    {
+      "question": "courageux",
+      "answer": "courageous (m.)"
+    },
+    {
+      "question": "courageuse",
+      "answer": "courageous (f.)"
+    },
+    {
+      "question": "lâche",
+      "answer": "cowardly (m./f.)"
+    },
+    {
+      "question": "actif",
+      "answer": "active (m.)"
+    },
+    {
+      "question": "active",
+      "answer": "active (f.)"
+    },
+    {
+      "question": "paresseux",
+      "answer": "lazy (m.)"
+    },
+    {
+      "question": "paresseuse",
+      "answer": "lazy (f.)"
+    },
+    {
+      "question": "calme",
+      "answer": "calm (m./f.)"
+    },
+    {
+      "question": "nerveux",
+      "answer": "nervous (m.)"
+    },
+    {
+      "question": "nerveuse",
+      "answer": "nervous (f.)"
+    },
+    {
+      "question": "joyeux",
+      "answer": "joyful (m.)"
+    },
+    {
+      "question": "joyeuse",
+      "answer": "joyful (f.)"
+    },
+    {
+      "question": "effrayant",
+      "answer": "frightening (m.)"
+    },
+    {
+      "question": "effrayante",
+      "answer": "frightening (f.)"
+    },
+    {
+      "question": "gentil",
+      "answer": "nice (m.)"
+    },
+    {
+      "question": "gentille",
+      "answer": "nice (f.)"
+    },
+    {
+      "question": "méchant",
+      "answer": "mean (m.)"
+    },
+    {
+      "question": "méchante",
+      "answer": "mean (f.)"
+    },
+    {
+      "question": "patient",
+      "answer": "patient (m.)"
+    },
+    {
+      "question": "patiente",
+      "answer": "patient (f.)"
+    },
+    {
+      "question": "impatient",
+      "answer": "impatient (m.)"
+    },
+    {
+      "question": "impatiente",
+      "answer": "impatient (f.)"
+    },
+    {
+      "question": "poli",
+      "answer": "polite (m.)"
+    },
+    {
+      "question": "polie",
+      "answer": "polite (f.)"
+    },
+    {
+      "question": "impoli",
+      "answer": "impolite (m.)"
+    },
+    {
+      "question": "impolie",
+      "answer": "impolite (f.)"
+    },
+    {
+      "question": "clair",
+      "answer": "clear, light (m.)"
+    },
+    {
+      "question": "claire",
+      "answer": "clear, light (f.)"
+    },
+    {
+      "question": "obscur",
+      "answer": "dark, obscure (m.)"
+    },
+    {
+      "question": "obscure",
+      "answer": "dark, obscure (f.)"
+    },
+    {
+      "question": "épais",
+      "answer": "thick (m.)"
+    },
+    {
+      "question": "épaisse",
+      "answer": "thick (f.)"
+    },
+    {
+      "question": "mince",
+      "answer": "thin (m./f.)"
+    },
+    {
+      "question": "rond",
+      "answer": "round (m.)"
+    },
+    {
+      "question": "ronde",
+      "answer": "round (f.)"
+    },
+    {
+      "question": "droit",
+      "answer": "straight (m.)"
+    },
+    {
+      "question": "droite",
+      "answer": "straight (f.)"
+    },
+    {
+      "question": "gauche",
+      "answer": "left (m./f.)"
+    },
+    {
+      "question": "juste",
+      "answer": "right, correct (m./f.)"
+    },
+    {
+      "question": "faux",
+      "answer": "wrong, false (m.)"
+    },
+    {
+      "question": "fausse",
+      "answer": "wrong, false (f.)"
+    },
+    {
+      "question": "correct",
+      "answer": "correct (m.)"
+    },
+    {
+      "question": "correcte",
+      "answer": "correct (f.)"
+    },
+    {
+      "question": "incorrect",
+      "answer": "incorrect (m.)"
+    },
+    {
+      "question": "incorrecte",
+      "answer": "incorrect (f.)"
+    },
+    {
+      "question": "complet",
+      "answer": "complete (m.)"
+    },
+    {
+      "question": "complète",
+      "answer": "complete (f.)"
+    },
+    {
+      "question": "incomplet",
+      "answer": "incomplete (m.)"
+    },
+    {
+      "question": "incomplète",
+      "answer": "incomplete (f.)"
+    },
+    {
+      "question": "parfait",
+      "answer": "perfect (m.)"
+    },
+    {
+      "question": "parfaite",
+      "answer": "perfect (f.)"
+    },
+    {
+      "question": "frais",
+      "answer": "fresh (m.)"
+    },
+    {
+      "question": "fraîche",
+      "answer": "fresh (f.)"
+    },
+    {
+      "question": "mûr",
+      "answer": "ripe (m.)"
+    },
+    {
+      "question": "mûre",
+      "answer": "ripe (f.)"
+    },
+    {
+      "question": "doux",
+      "answer": "soft, gentle (m.)"
+    },
+    {
+      "question": "douce",
+      "answer": "soft, gentle (f.)"
+    },
+    {
+      "question": "dur",
+      "answer": "hard (m.)"
+    },
+    {
+      "question": "dure",
+      "answer": "hard (f.)"
+    },
+    {
+      "question": "solide",
+      "answer": "solid (m./f.)"
+    },
+    {
+      "question": "creux",
+      "answer": "hollow (m.)"
+    },
+    {
+      "question": "creuse",
+      "answer": "hollow (f.)"
+    },
+    {
+      "question": "plat",
+      "answer": "flat (m.)"
+    },
+    {
+      "question": "plate",
+      "answer": "flat (f.)"
+    },
+    {
+      "question": "fin",
+      "answer": "fine, thin (m.)"
+    },
+    {
+      "question": "fine",
+      "answer": "fine, thin (f.)"
+    },
+    {
+      "question": "gros",
+      "answer": "big, fat (m.)"
+    },
+    {
+      "question": "grosse",
+      "answer": "big, fat (f.)"
+    },
+    {
+      "question": "petit",
+      "answer": "small (m.)"
+    },
+    {
+      "question": "petite",
+      "answer": "small (f.)"
+    },
+    {
+      "question": "beau",
+      "answer": "beautiful, handsome (m.)"
+    },
+    {
+      "question": "belle",
+      "answer": "beautiful (f.)"
+    },
+    {
+      "question": "joli",
+      "answer": "pretty (m.)"
+    },
+    {
+      "question": "jolie",
+      "answer": "pretty (f.)"
+    },
+    {
+      "question": "laid",
+      "answer": "ugly (m.)"
+    },
+    {
+      "question": "laide",
+      "answer": "ugly (f.)"
+    },
+    {
+      "question": "moche",
+      "answer": "ugly, unattractive (m./f.)"
+    },
+    {
+      "question": "élégant",
+      "answer": "elegant (m.)"
+    },
+    {
+      "question": "élégante",
+      "answer": "elegant (f.)"
+    },
+    {
+      "question": "moderne",
+      "answer": "modern (m./f.)"
+    },
+    {
+      "question": "ancien",
+      "answer": "ancient, old (m.)"
+    },
+    {
+      "question": "ancienne",
+      "answer": "ancient, old (f.)"
+    },
+    {
+      "question": "neuf",
+      "answer": "new (m.)"
+    },
+    {
+      "question": "neuve",
+      "answer": "new (f.)"
+    },
+    {
+      "question": "facile",
+      "answer": "easy (m./f.)"
+    },
+    {
+      "question": "difficile",
+      "answer": "difficult (m./f.)"
+    },
+    {
+      "question": "possible",
+      "answer": "possible (m./f.)"
+    },
+    {
+      "question": "impossible",
+      "answer": "impossible (m./f.)"
+    },
+    {
+      "question": "intéressant",
+      "answer": "interesting (m.)"
+    },
+    {
+      "question": "intéressante",
+      "answer": "interesting (f.)"
+    },
+    {
+      "question": "ennuyeux",
+      "answer": "boring (m.)"
+    },
+    {
+      "question": "ennuyeuse",
+      "answer": "boring (f.)"
+    },
+    {
+      "question": "amusant",
+      "answer": "amusing, fun (m.)"
+    },
+    {
+      "question": "amusante",
+      "answer": "amusing, fun (f.)"
+    },
+    {
+      "question": "fatiguant",
+      "answer": "tiring (m.)"
+    },
+    {
+      "question": "fatiguante",
+      "answer": "tiring (f.)"
+    },
+    {
+      "question": "épuisant",
+      "answer": "exhausting (m.)"
+    },
+    {
+      "question": "épuisante",
+      "answer": "exhausting (f.)"
+    },
+    {
+      "question": "relaxant",
+      "answer": "relaxing (m.)"
+    },
+    {
+      "question": "relaxante",
+      "answer": "relaxing (f.)"
+    },
+    {
+      "question": "préféré",
+      "answer": "favorite (m.)"
+    },
+    {
+      "question": "préférée",
+      "answer": "favorite (f.)"
+    },
+    {
+      "question": "célèbre",
+      "answer": "famous (m./f.)"
+    },
+    {
+      "question": "inconnu",
+      "answer": "unknown (m.)"
+    },
+    {
+      "question": "inconnue",
+      "answer": "unknown (f.)"
+    }
+  ]
+},
+{
+  "title": "Adverbs & Connectors",
+  "icon": "fas fa-link",
+  "questions": [
+    {
+      "question": "ici",
+      "answer": "here"
+    },
+    {
+      "question": "là",
+      "answer": "there"
+    },
+    {
+      "question": "là-bas",
+      "answer": "over there"
+    },
+    {
+      "question": "ailleurs",
+      "answer": "elsewhere"
+    },
+    {
+      "question": "partout",
+      "answer": "everywhere"
+    },
+    {
+      "question": "nulle part",
+      "answer": "nowhere"
+    },
+    {
+      "question": "jamais",
+      "answer": "never"
+    },
+    {
+      "question": "souvent",
+      "answer": "often"
+    },
+    {
+      "question": "toujours",
+      "answer": "always"
+    },
+    {
+      "question": "quelquefois",
+      "answer": "sometimes"
+    },
+    {
+      "question": "rarement",
+      "answer": "rarely"
+    },
+    {
+      "question": "maintenant",
+      "answer": "now"
+    },
+    {
+      "question": "aujourd'hui",
+      "answer": "today"
+    },
+    {
+      "question": "hier",
+      "answer": "yesterday"
+    },
+    {
+      "question": "demain",
+      "answer": "tomorrow"
+    },
+    {
+      "question": "tôt",
+      "answer": "early"
+    },
+    {
+      "question": "tard",
+      "answer": "late"
+    },
+    {
+      "question": "vite",
+      "answer": "quickly"
+    },
+    {
+      "question": "lentement",
+      "answer": "slowly"
+    },
+    {
+      "question": "mal",
+      "answer": "badly"
+    },
+    {
+      "question": "bien",
+      "answer": "well"
+    },
+    {
+      "question": "mieux",
+      "answer": "better"
+    },
+    {
+      "question": "pire",
+      "answer": "worse"
+    },
+    {
+      "question": "assez",
+      "answer": "enough, quite"
+    },
+    {
+      "question": "beaucoup",
+      "answer": "a lot, much"
+    },
+    {
+      "question": "très",
+      "answer": "very"
+    },
+    {
+      "question": "trop",
+      "answer": "too much"
+    },
+    {
+      "question": "peu",
+      "answer": "little"
+    },
+    {
+      "question": "moins",
+      "answer": "less"
+    },
+    {
+      "question": "plus",
+      "answer": "more"
+    },
+    {
+      "question": "aussi",
+      "answer": "also"
+    },
+    {
+      "question": "puis",
+      "answer": "then"
+    },
+    {
+      "question": "ensuite",
+      "answer": "next"
+    },
+    {
+      "question": "d'abord",
+      "answer": "first of all"
+    },
+    {
+      "question": "enfin",
+      "answer": "finally"
+    },
+    {
+      "question": "heureusement",
+      "answer": "fortunately"
+    },
+    {
+      "question": "malheureusement",
+      "answer": "unfortunately"
+    },
+    {
+      "question": "certainement",
+      "answer": "certainly"
+    },
+    {
+      "question": "peut-être",
+      "answer": "maybe, perhaps"
+    },
+    {
+      "question": "absolument",
+      "answer": "absolutely"
+    },
+    {
+      "question": "simplement",
+      "answer": "simply"
+    },
+    {
+      "question": "seulement",
+      "answer": "only"
+    },
+    {
+      "question": "vraiment",
+      "answer": "really"
+    },
+    {
+      "question": "soudain",
+      "answer": "suddenly"
+    },
+    {
+      "question": "tout à coup",
+      "answer": "all of a sudden"
+    },
+    {
+      "question": "en face",
+      "answer": "opposite"
+    },
+    {
+      "question": "à côté",
+      "answer": "next to"
+    },
+    {
+      "question": "derrière",
+      "answer": "behind"
+    },
+    {
+      "question": "devant",
+      "answer": "in front of"
+    },
+    {
+      "question": "dessus",
+      "answer": "above"
+    },
+    {
+      "question": "dessous",
+      "answer": "below"
+    },
+    {
+      "question": "dedans",
+      "answer": "inside"
+    },
+    {
+      "question": "dehors",
+      "answer": "outside"
+    },
+    {
+      "question": "avant",
+      "answer": "before"
+    },
+    {
+      "question": "après",
+      "answer": "after"
+    },
+    {
+      "question": "pendant",
+      "answer": "during"
+    },
+    {
+      "question": "depuis",
+      "answer": "since, for"
+    },
+    {
+      "question": "pour",
+      "answer": "for"
+    },
+    {
+      "question": "avec",
+      "answer": "with"
+    },
+    {
+      "question": "sans",
+      "answer": "without"
+    },
+    {
+      "question": "contre",
+      "answer": "against"
+    },
+    {
+      "question": "entre",
+      "answer": "between"
+    },
+    {
+      "question": "parmi",
+      "answer": "among"
+    },
+    {
+      "question": "chez",
+      "answer": "at someone's place"
+    },
+    {
+      "question": "vers",
+      "answer": "towards"
+    },
+    {
+      "question": "jusqu'à",
+      "answer": "until"
+    },
+    {
+      "question": "grâce à",
+      "answer": "thanks to"
+    },
+    {
+      "question": "à cause de",
+      "answer": "because of"
+    },
+    {
+      "question": "comme",
+      "answer": "like, as"
+    },
+    {
+      "question": "donc",
+      "answer": "so, therefore"
+    },
+    {
+      "question": "car",
+      "answer": "because, for"
+    },
+    {
+      "question": "parce que",
+      "answer": "because"
+    },
+    {
+      "question": "puisque",
+      "answer": "since"
+    },
+    {
+      "question": "mais",
+      "answer": "but"
+    },
+    {
+      "question": "ou",
+      "answer": "or"
+    },
+    {
+      "question": "et",
+      "answer": "and"
+    },
+    {
+      "question": "ni...ni",
+      "answer": "neither...nor"
+    },
+    {
+      "question": "quand",
+      "answer": "when"
+    },
+    {
+      "question": "comment",
+      "answer": "how"
+    },
+    {
+      "question": "pourquoi",
+      "answer": "why"
+    },
+    {
+      "question": "où",
+      "answer": "where"
+    },
+    {
+      "question": "combien",
+      "answer": "how much"
+    },
+    {
+      "question": "que",
+      "answer": "that, what"
+    },
+    {
+      "question": "qui",
+      "answer": "who"
+    },
+    {
+      "question": "quoi",
+      "answer": "what"
+    },
+    {
+      "question": "lequel",
+      "answer": "which one (m.)"
+    },
+    {
+      "question": "laquelle",
+      "answer": "which one (f.)"
+    },
+    {
+      "question": "lesquels",
+      "answer": "which ones (m.pl.)"
+    },
+    {
+      "question": "lesquelles",
+      "answer": "which ones (f.pl.)"
+    },
+    {
+      "question": "chacun",
+      "answer": "each one (m.)"
+    },
+    {
+      "question": "chacune",
+      "answer": "each one (f.)"
+    },
+    {
+      "question": "quelque chose",
+      "answer": "something"
+    },
+    {
+      "question": "rien",
+      "answer": "nothing"
+    },
+    {
+      "question": "tout",
+      "answer": "all, everything (m.sg.)"
+    },
+    {
+      "question": "toute",
+      "answer": "all, everything (f.sg.)"
+    },
+    {
+      "question": "tous",
+      "answer": "all (m.pl.)"
+    },
+    {
+      "question": "toutes",
+      "answer": "all (f.pl.)"
+    },
+    {
+      "question": "certains",
+      "answer": "some (m.pl.)"
+    },
+    {
+      "question": "certaines",
+      "answer": "some (f.pl.)"
+    },
+    {
+      "question": "plusieurs",
+      "answer": "several"
+    },
+    {
+      "question": "quelques",
+      "answer": "a few"
+    },
+    {
+      "question": "chaque",
+      "answer": "each, every"
+    },
+    {
+      "question": "autre",
+      "answer": "other"
+    },
+    {
+      "question": "toutefois",
+      "answer": "however"
+    },
+    {
+      "question": "cependant",
+      "answer": "however, nevertheless"
+    },
+    {
+      "question": "néanmoins",
+      "answer": "nevertheless"
+    },
+    {
+      "question": "en conséquence",
+      "answer": "as a result"
+    },
+    {
+      "question": "ainsi",
+      "answer": "thus, so"
+    },
+    {
+      "question": "alors",
+      "answer": "then"
+    },
+    {
+      "question": "dès que",
+      "answer": "as soon as"
+    },
+    {
+      "question": "pendant que",
+      "answer": "while"
+    },
+    {
+      "question": "tandis que",
+      "answer": "whereas"
+    },
+    {
+      "question": "par conséquent",
+      "answer": "consequently"
+    },
+    {
+      "question": "par exemple",
+      "answer": "for example"
+    },
+    {
+      "question": "c'est-à-dire",
+      "answer": "that is to say"
+    },
+    {
+      "question": "au contraire",
+      "answer": "on the contrary"
+    },
+    {
+      "question": "au lieu de",
+      "answer": "instead of"
+    },
+    {
+      "question": "grâce à",
+      "answer": "thanks to"
+    },
+    {
+      "question": "à cause de",
+      "answer": "because of"
+    },
+    {
+      "question": "à condition que",
+      "answer": "on condition that"
+    },
+    {
+      "question": "afin que",
+      "answer": "so that"
+    },
+    {
+      "question": "pour que",
+      "answer": "in order that, so that"
+    },
+    {
+      "question": "bien que",
+      "answer": "although"
+    },
+    {
+      "question": "quoique",
+      "answer": "although"
+    },
+    {
+      "question": "selon",
+      "answer": "according to"
+    },
+    {
+      "question": "sauf",
+      "answer": "except"
+    },
+    {
+      "question": "surtout",
+      "answer": "especially"
+    },
+    {
+      "question": "en général",
+      "answer": "in general"
+    },
+    {
+      "question": "en particulier",
+      "answer": "in particular"
+    }
+  ]
+},
+{
+  "title": "Expressions & Chunks (Easy)",
+  "icon": "fas fa-check",
+  "questions": [
+    {
+      "question": "Comment ça va ?",
+      "answer": "How are you?"
+    },
+    {
+      "question": "Ça va bien, merci.",
+      "answer": "I'm doing well, thank you."
+    },
+    {
+      "question": "Je m'appelle...",
+      "answer": "My name is..."
+    },
+    {
+      "question": "Enchanté(e).",
+      "answer": "Nice to meet you."
+    },
+    {
+      "question": "Quel âge as-tu ?",
+      "answer": "How old are you?"
+    },
+    {
+      "question": "J'ai... ans.",
+      "answer": "I am... years old."
+    },
+    {
+      "question": "D'où viens-tu ?",
+      "answer": "Where are you from?"
+    },
+    {
+      "question": "Je suis de...",
+      "answer": "I am from..."
+    },
+    {
+      "question": "Où habites-tu ?",
+      "answer": "Where do you live?"
+    },
+    {
+      "question": "J'habite à...",
+      "answer": "I live in..."
+    },
+    {
+      "question": "S'il vous plaît.",
+      "answer": "Please (formal)."
+    },
+    {
+      "question": "S'il te plaît.",
+      "answer": "Please (informal)."
+    },
+    {
+      "question": "Merci beaucoup.",
+      "answer": "Thank you very much."
+    },
+    {
+      "question": "De rien.",
+      "answer": "You're welcome."
+    },
+    {
+      "question": "Pardon.",
+      "answer": "Excuse me."
+    },
+    {
+      "question": "Je suis désolé(e).",
+      "answer": "I'm sorry."
+    },
+    {
+      "question": "Excusez-moi.",
+      "answer": "Excuse me (formal)."
+    },
+    {
+      "question": "Excuse-moi.",
+      "answer": "Excuse me (informal)."
+    },
+    {
+      "question": "À bientôt.",
+      "answer": "See you soon."
+    },
+    {
+      "question": "À tout à l'heure.",
+      "answer": "See you later (today)."
+    },
+    {
+      "question": "À demain.",
+      "answer": "See you tomorrow."
+    },
+    {
+      "question": "Au revoir.",
+      "answer": "Goodbye."
+    },
+    {
+      "question": "Bonne journée !",
+      "answer": "Have a nice day!"
+    },
+    {
+      "question": "Bonne soirée !",
+      "answer": "Have a nice evening!"
+    },
+    {
+      "question": "Bonne nuit.",
+      "answer": "Good night."
+    },
+    {
+      "question": "Oui, bien sûr.",
+      "answer": "Yes, of course."
+    },
+    {
+      "question": "Non, pas du tout.",
+      "answer": "No, not at all."
+    },
+    {
+      "question": "Je ne comprends pas.",
+      "answer": "I don't understand."
+    },
+    {
+      "question": "Pouvez-vous répéter ?",
+      "answer": "Can you repeat? (formal)"
+    },
+    {
+      "question": "Peux-tu répéter ?",
+      "answer": "Can you repeat? (informal)"
+    },
+    {
+      "question": "Parlez-vous anglais ?",
+      "answer": "Do you speak English? (formal)"
+    },
+    {
+      "question": "Parles-tu anglais ?",
+      "answer": "Do you speak English? (informal)"
+    },
+    {
+      "question": "Je parle un peu français.",
+      "answer": "I speak a little French."
+    },
+    {
+      "question": "Quel est le prix ?",
+      "answer": "What is the price?"
+    },
+    {
+      "question": "Combien ça coûte ?",
+      "answer": "How much does it cost?"
+    },
+    {
+      "question": "C'est cher.",
+      "answer": "It's expensive."
+    },
+    {
+      "question": "C'est bon marché.",
+      "answer": "It's cheap."
+    },
+    {
+      "question": "Où sont les toilettes ?",
+      "answer": "Where are the toilets?"
+    },
+    {
+      "question": "Je voudrais...",
+      "answer": "I would like..."
+    },
+    {
+      "question": "Un café, s'il vous plaît.",
+      "answer": "A coffee, please."
+    },
+    {
+      "question": "L'addition, s'il vous plaît.",
+      "answer": "The bill, please."
+    },
+    {
+      "question": "Je voudrais payer.",
+      "answer": "I would like to pay."
+    },
+    {
+      "question": "J'ai faim.",
+      "answer": "I am hungry."
+    },
+    {
+      "question": "J'ai soif.",
+      "answer": "I am thirsty."
+    },
+    {
+      "question": "J'ai chaud.",
+      "answer": "I am hot."
+    },
+    {
+      "question": "J'ai froid.",
+      "answer": "I am cold."
+    },
+    {
+      "question": "Il est quelle heure ?",
+      "answer": "What time is it?"
+    },
+    {
+      "question": "Je suis fatigué(e).",
+      "answer": "I am tired."
+    },
+    {
+      "question": "Je suis perdu(e).",
+      "answer": "I am lost."
+    },
+    {
+      "question": "C'est délicieux.",
+      "answer": "It's delicious."
+    },
+    {
+      "question": "J'aime...",
+      "answer": "I like..."
+    },
+    {
+      "question": "Je n'aime pas...",
+      "answer": "I don't like..."
+    },
+    {
+      "question": "Je peux vous aider ?",
+      "answer": "Can I help you? (formal)"
+    },
+    {
+      "question": "Je peux t'aider ?",
+      "answer": "Can I help you? (informal)"
+    },
+    {
+      "question": "Pouvez-vous m'aider ?",
+      "answer": "Can you help me? (formal)"
+    },
+    {
+      "question": "Peux-tu m'aider ?",
+      "answer": "Can you help me? (informal)"
+    },
+    {
+      "question": "C'est combien ?",
+      "answer": "How much is it?"
+    },
+    {
+      "question": "Je cherche...",
+      "answer": "I am looking for..."
+    },
+    {
+      "question": "Tournez à droite.",
+      "answer": "Turn right."
+    },
+    {
+      "question": "Tournez à gauche.",
+      "answer": "Turn left."
+    },
+    {
+      "question": "Tout droit.",
+      "answer": "Straight ahead."
+    },
+    {
+      "question": "Où se trouve...?",
+      "answer": "Where is...?"
+    },
+    {
+      "question": "C'est loin ?",
+      "answer": "Is it far?"
+    },
+    {
+      "question": "C'est près d'ici.",
+      "answer": "It's close by."
+    },
+    {
+      "question": "À quelle heure...?",
+      "answer": "At what time...?"
+    },
+    {
+      "question": "Il fait beau.",
+      "answer": "The weather is nice."
+    },
+    {
+      "question": "Il fait mauvais.",
+      "answer": "The weather is bad."
+    },
+    {
+      "question": "Il pleut.",
+      "answer": "It's raining."
+    },
+    {
+      "question": "Il neige.",
+      "answer": "It's snowing."
+    },
+    {
+      "question": "Il fait chaud.",
+      "answer": "It's hot."
+    },
+    {
+      "question": "Il fait froid.",
+      "answer": "It's cold."
+    },
+    {
+      "question": "Je suis sûr(e) que...",
+      "answer": "I am sure that..."
+    },
+    {
+      "question": "Je ne suis pas sûr(e).",
+      "answer": "I am not sure."
+    },
+    {
+      "question": "C'est une bonne idée.",
+      "answer": "That's a good idea."
+    },
+    {
+      "question": "C'est une mauvaise idée.",
+      "answer": "That's a bad idea."
+    },
+    {
+      "question": "Je suis d'accord.",
+      "answer": "I agree."
+    },
+    {
+      "question": "Je ne suis pas d'accord.",
+      "answer": "I don't agree."
+    },
+    {
+      "question": "C'est incroyable !",
+      "answer": "It's incredible!"
+    },
+    {
+      "question": "C'est pas possible !",
+      "answer": "It's not possible!"
+    },
+    {
+      "question": "J'ai besoin de...",
+      "answer": "I need..."
+    },
+    {
+      "question": "J'ai envie de...",
+      "answer": "I feel like..."
+    },
+    {
+      "question": "Je ne sais pas.",
+      "answer": "I don't know."
+    },
+    {
+      "question": "Qu'est-ce que c'est ?",
+      "answer": "What is this?"
+    },
+    {
+      "question": "Qui est-ce ?",
+      "answer": "Who is it?"
+    },
+    {
+      "question": "Pourquoi pas ?",
+      "answer": "Why not?"
+    },
+    {
+      "question": "Pas de problème.",
+      "answer": "No problem."
+    },
+    {
+      "question": "C'est la vie.",
+      "answer": "That's life."
+    },
+    {
+      "question": "Bon courage !",
+      "answer": "Good luck! (for a task)"
+    },
+    {
+      "question": "Joyeux anniversaire !",
+      "answer": "Happy birthday!"
+    },
+    {
+      "question": "Bonne chance !",
+      "answer": "Good luck! (for chance)"
+    },
+    {
+      "question": "Félicitations !",
+      "answer": "Congratulations!"
+    },
+    {
+      "question": "Santé !",
+      "answer": "Cheers! / To your health!"
+    },
+    {
+      "question": "À votre santé !",
+      "answer": "To your health! (formal)"
+    },
+    {
+      "question": "À ta santé !",
+      "answer": "To your health! (informal)"
+    },
+    {
+      "question": "Je peux...",
+      "answer": "I can..."
+    },
+    {
+      "question": "Je ne peux pas...",
+      "answer": "I can't..."
+    },
+    {
+      "question": "C'est facile.",
+      "answer": "It's easy."
+    },
+    {
+      "question": "C'est difficile.",
+      "answer": "It's difficult."
+    },
+    {
+      "question": "C'est possible.",
+      "answer": "It's possible."
+    },
+    {
+      "question": "C'est impossible.",
+      "answer": "It's impossible."
+    },
+    {
+      "question": "C'est vrai.",
+      "answer": "That's true."
+    },
+    {
+      "question": "C'est faux.",
+      "answer": "That's false."
+    },
+    {
+      "question": "Je pense que oui.",
+      "answer": "I think so."
+    },
+    {
+      "question": "Je pense que non.",
+      "answer": "I don't think so."
+    },
+    {
+      "question": "Je suis prêt(e).",
+      "answer": "I am ready."
+    },
+    {
+      "question": "Je ne suis pas prêt(e).",
+      "answer": "I am not ready."
+    },
+    {
+      "question": "Je suis pressé(e).",
+      "answer": "I'm in a hurry."
+    },
+    {
+      "question": "Prenez votre temps.",
+      "answer": "Take your time (formal)."
+    },
+    {
+      "question": "Prends ton temps.",
+      "answer": "Take your time (informal)."
+    },
+    {
+      "question": "J'espère que oui.",
+      "answer": "I hope so."
+    },
+    {
+      "question": "J'espère que non.",
+      "answer": "I hope not."
+    },
+    {
+      "question": "Je crois que oui.",
+      "answer": "I believe so."
+    },
+    {
+      "question": "Je crois que non.",
+      "answer": "I don't believe so."
+    },
+    {
+      "question": "C'est mon tour.",
+      "answer": "It's my turn."
+    },
+    {
+      "question": "C'est votre tour.",
+      "answer": "It's your turn (formal)."
+    },
+    {
+      "question": "C'est ton tour.",
+      "answer": "It's your turn (informal)."
+    },
+    {
+      "question": "J'ai fini.",
+      "answer": "I have finished."
+    },
+    {
+      "question": "J'ai commencé.",
+      "answer": "I have started."
+    },
+    {
+      "question": "J'ai besoin de plus de temps.",
+      "answer": "I need more time."
+    },
+    {
+      "question": "J'ai besoin d'aide.",
+      "answer": "I need help."
+    },
+    {
+      "question": "Je suis content(e) de...",
+      "answer": "I am happy to..."
+    },
+    {
+      "question": "Je suis triste de...",
+      "answer": "I am sad to..."
+    },
+    {
+      "question": "Je suis surpris(e) de...",
+      "answer": "I am surprised to..."
+    },
+    {
+      "question": "Je suis ravi(e) de...",
+      "answer": "I am delighted to..."
+    },
+    {
+      "question": "Ce n'est pas grave.",
+      "answer": "It's not a big deal."
+    },
+    {
+      "question": "Ce n'est rien.",
+      "answer": "It's nothing."
+    },
+    {
+      "question": "J'ai tort.",
+      "answer": "I am wrong."
+    },
+    {
+      "question": "J'ai raison.",
+      "answer": "I am right."
+    },
+    {
+      "question": "À quoi ça sert ?",
+      "answer": "What's the use of that?"
+    },
+    {
+      "question": "Je me sens bien.",
+      "answer": "I feel good."
+    },
+    {
+      "question": "Je me sens mal.",
+      "answer": "I feel bad."
+    },
+    {
+      "question": "Bonne continuation.",
+      "answer": "Keep up the good work / All the best."
+    },
+    {
+      "question": "Je vous en prie.",
+      "answer": "You are welcome (formal)."
+    },
+    {
+      "question": "Je t'en prie.",
+      "answer": "You are welcome (informal)."
+    },
+    {
+      "question": "S'il y a quelque chose.",
+      "answer": "If there's anything."
+    },
+    {
+      "question": "Je suis là pour vous.",
+      "answer": "I'm here for you (formal)."
+    },
+    {
+      "question": "Je suis là pour toi.",
+      "answer": "I'm here for you (informal)."
+    },
+    {
+      "question": "Avec plaisir.",
+      "answer": "With pleasure."
+    },
+    {
+      "question": "Absolument.",
+      "answer": "Absolutely."
+    },
+    {
+      "question": "C'est génial !",
+      "answer": "It's great!"
+    },
+    {
+      "question": "C'est dommage.",
+      "answer": "It's a shame."
+    },
+    {
+      "question": "Tant pis.",
+      "answer": "Too bad."
+    },
+    {
+      "question": "Tant mieux.",
+      "answer": "So much the better."
+    },
+    {
+      "question": "Bon appétit !",
+      "answer": "Enjoy your meal!"
+    },
+    {
+      "question": "Passez un bon moment.",
+      "answer": "Have a good time (formal)."
+    },
+    {
+      "question": "Passe un bon moment.",
+      "answer": "Have a good time (informal)."
+    },
+    {
+      "question": "Je suis désolé(e) pour votre perte.",
+      "answer": "I'm sorry for your loss."
+    },
+    {
+      "question": "Courage !",
+      "answer": "Be brave! / You can do it!"
+    },
+    {
+      "question": "À la prochaine !",
+      "answer": "Until next time!"
+    },
+    {
+      "question": "Prenez soin de vous.",
+      "answer": "Take care of yourself (formal)."
+    },
+    {
+      "question": "Prends soin de toi.",
+      "answer": "Take care of yourself (informal)."
+    },
+    {
+      "question": "J'ai hâte de...",
+      "answer": "I can't wait to..."
+    },
+    {
+      "question": "Je suis impatient(e) de...",
+      "answer": "I am impatient to..."
+    },
+    {
+      "question": "Pas de souci.",
+      "answer": "No worries."
+    },
+    {
+      "question": "Ça ne fait rien.",
+      "answer": "It doesn't matter."
+    },
+    {
+      "question": "C'est pas grave.",
+      "answer": "It's no big deal."
+    },
+    {
+      "question": "Je n'ai pas le temps.",
+      "answer": "I don't have time."
+    },
+    {
+      "question": "J'ai le temps.",
+      "answer": "I have time."
+    }
+  ]
+},
+{
+  "title": "Expressions & Chunks (Hard)",
+  "icon": "fas fa-robot",
+  "questions": [
+    {
+      "question": "Ça n'a pas de sens.",
+      "answer": "It doesn't make sense."
+    },
+    {
+      "question": "Il n'y a pas de quoi.",
+      "answer": "You're welcome. / Don't mention it."
+    },
+    {
+      "question": "À mon avis...",
+      "answer": "In my opinion..."
+    },
+    {
+      "question": "J'ai l'impression que...",
+      "answer": "I have the impression that..."
+    },
+    {
+      "question": "Il faut que...",
+      "answer": "It is necessary that..."
+    },
+    {
+      "question": "Il est temps de...",
+      "answer": "It's time to..."
+    },
+    {
+      "question": "Ça me fait plaisir.",
+      "answer": "I'm happy about that. / That pleases me."
+    },
+    {
+      "question": "Ça me rend triste.",
+      "answer": "That makes me sad."
+    },
+    {
+      "question": "J'ai du mal à...",
+      "answer": "I have trouble..."
+    },
+    {
+      "question": "Je suis au courant.",
+      "answer": "I am aware."
+    },
+    {
+      "question": "Je ne suis pas au courant.",
+      "answer": "I am not aware."
+    },
+    {
+      "question": "Cela dépend.",
+      "answer": "It depends."
+    },
+    {
+      "question": "En fin de compte...",
+      "answer": "In the end..."
+    },
+    {
+      "question": "En tout cas...",
+      "answer": "In any case..."
+    },
+    {
+      "question": "Au fur et à mesure...",
+      "answer": "As one goes along..."
+    },
+    {
+      "question": "Il vaut mieux que...",
+      "answer": "It's better that..."
+    },
+    {
+      "question": "À force de...",
+      "answer": "By dint of..."
+    },
+    {
+      "question": "De temps en temps.",
+      "answer": "From time to time."
+    },
+    {
+      "question": "Du jour au lendemain.",
+      "answer": "Overnight."
+    },
+    {
+      "question": "Avoir l'air de...",
+      "answer": "To seem like..."
+    },
+    {
+      "question": "Être sur le point de...",
+      "answer": "To be about to..."
+    },
+    {
+      "question": "Il se peut que...",
+      "answer": "It may be that..."
+    },
+    {
+      "question": "Quoi qu'il en soit...",
+      "answer": "Be that as it may..."
+    },
+    {
+      "question": "Ne t'en fais pas.",
+      "answer": "Don't worry about it (informal)."
+    },
+    {
+      "question": "Ne vous en faites pas.",
+      "answer": "Don't worry about it (formal)."
+    },
+    {
+      "question": "C'est la goutte d'eau qui fait déborder le vase.",
+      "answer": "That's the last straw."
+    },
+    {
+      "question": "Mieux vaut tard que jamais.",
+      "answer": "Better late than never."
+    },
+    {
+      "question": "C'est du gâteau.",
+      "answer": "It's a piece of cake."
+    },
+    {
+      "question": "Faire d'une pierre deux coups.",
+      "answer": "To kill two birds with one stone."
+    },
+    {
+      "question": "Avoir la pêche.",
+      "answer": "To be in great shape. (lit: to have the peach)"
+    },
+    {
+      "question": "Avoir le cafard.",
+      "answer": "To feel down. (lit: to have the cockroach)"
+    },
+    {
+      "question": "Il pleut des cordes.",
+      "answer": "It's raining cats and dogs. (lit: it's raining ropes)"
+    },
+    {
+      "question": "Coûter les yeux de la tête.",
+      "answer": "To cost an arm and a leg. (lit: to cost the eyes of the head)"
+    },
+    {
+      "question": "Jeter l'argent par les fenêtres.",
+      "answer": "To waste money. (lit: to throw money out the windows)"
+    },
+    {
+      "question": "Être au septième ciel.",
+      "answer": "To be on cloud nine."
+    },
+    {
+      "question": "Poser un lapin à quelqu'un.",
+      "answer": "To stand someone up. (lit: to pose a rabbit to someone)"
+    },
+    {
+      "question": "Faire la grasse matinée.",
+      "answer": "To sleep in. (lit: to do the fat morning)"
+    },
+    {
+      "question": "Avoir le cœur sur la main.",
+      "answer": "To be big-hearted. (lit: to have the heart on the hand)"
+    },
+    {
+      "question": "Ça n'a ni queue ni tête.",
+      "answer": "It makes no sense. (lit: it has neither tail nor head)"
+    },
+    {
+      "question": "Passer l'éponge.",
+      "answer": "To forgive and forget. (lit: to pass the sponge)"
+    },
+    {
+      "question": "Faire le pont.",
+      "answer": "To take a long weekend. (lit: to make the bridge)"
+    },
+    {
+      "question": "Avoir un chat dans la gorge.",
+      "answer": "To have a frog in one's throat. (lit: to have a cat in the throat)"
+    },
+    {
+      "question": "C'est la fin des haricots.",
+      "answer": "It's the end of the line. (lit: it's the end of the beans)"
+    },
+    {
+      "question": "Donner sa langue au chat.",
+      "answer": "To give up guessing. (lit: to give one's tongue to the cat)"
+    },
+    {
+      "question": "Tomber dans les pommes.",
+      "answer": "To faint. (lit: to fall into the apples)"
+    },
+    {
+      "question": "Être sur son trente-et-un.",
+      "answer": "To be dressed to the nines. (lit: to be on one's thirty-one)"
+    },
+    {
+      "question": "Il ne faut pas vendre la peau de l'ours avant de l'avoir tué.",
+      "answer": "Don't count your chickens before they're hatched. (lit: one must not sell the skin of the bear before having killed it)"
+    },
+    {
+      "question": "Petit à petit, l'oiseau fait son nid.",
+      "answer": "Little by little, the bird builds its nest. (Every little bit helps.)"
+    },
+    {
+      "question": "Quand le chat n'est pas là, les souris dansent.",
+      "answer": "When the cat's away, the mice will play."
+    },
+    {
+      "question": "Ne pas y aller par quatre chemins.",
+      "answer": "To get straight to the point."
+    },
+    {
+      "question": "Faire chou blanc.",
+      "answer": "To fail. (lit: to make white cabbage)"
+    },
+    {
+      "question": "Faire la sourde oreille.",
+      "answer": "To turn a deaf ear."
+    },
+    {
+      "question": "Avoir la chair de poule.",
+      "answer": "To have goosebumps. (lit: to have chicken flesh)"
+    },
+    {
+      "question": "Mettre les pieds dans le plat.",
+      "answer": "To put one's foot in it."
+    },
+    {
+      "question": "Être bête comme ses pieds.",
+      "answer": "To be as dumb as a rock. (lit: to be as dumb as one's feet)"
+    },
+    {
+      "question": "C'est la fin du monde.",
+      "answer": "It's the end of the world."
+    },
+    {
+      "question": "Chacun pour soi.",
+      "answer": "Every man for himself."
+    },
+    {
+      "question": "Loin des yeux, loin du cœur.",
+      "answer": "Out of sight, out of mind."
+    },
+    {
+      "question": "Qui ne tente rien n'a rien.",
+      "answer": "Nothing ventured, nothing gained."
+    },
+    {
+      "question": "Tout ce qui brille n'est pas or.",
+      "answer": "All that glitters is not gold."
+    },
+    {
+      "question": "Un tiens vaut mieux que deux tu l'auras.",
+      "answer": "A bird in the hand is worth two in the bush."
+    },
+    {
+      "question": "Il y a un mais...",
+      "answer": "There is a but..."
+    },
+    {
+      "question": "Mettre la main à la pâte.",
+      "answer": "To lend a hand."
+    },
+    {
+      "question": "Prendre ses jambes à son cou.",
+      "answer": "To take to one's heels."
+    },
+    {
+      "question": "Avoir un poil dans la main.",
+      "answer": "To be lazy. (lit: to have a hair in the hand)"
+    },
+    {
+      "question": "Il ne faut pas mettre la charrue avant les bœufs.",
+      "answer": "Don't put the cart before the horse."
+    },
+    {
+      "question": "Casser la croûte.",
+      "answer": "To have a snack. (lit: to break the crust)"
+    },
+    {
+      "question": "Faire le mur.",
+      "answer": "To sneak out. (lit: to do the wall)"
+    },
+    {
+      "question": "Être au bout du rouleau.",
+      "answer": "To be at the end of one's rope."
+    },
+    {
+      "question": "Avoir la tête sur les épaules.",
+      "answer": "To be level-headed. (lit: to have the head on the shoulders)"
+    },
+    {
+      "question": "C'est du pareil au même.",
+      "answer": "It's all the same."
+    },
+    {
+      "question": "Faire le point.",
+      "answer": "To take stock."
+    },
+    {
+      "question": "Avoir les yeux plus gros que le ventre.",
+      "answer": "To have eyes bigger than one's stomach."
+    },
+    {
+      "question": "Être de mauvaise foi.",
+      "answer": "To be dishonest/in bad faith."
+    },
+    {
+      "question": "Prendre ses désirs pour des réalités.",
+      "answer": "To mistake one's wishes for reality."
+    },
+    {
+      "question": "Il n'y a pas de fumée sans feu.",
+      "answer": "There's no smoke without fire."
+    },
+    {
+      "question": "C'est l'hôpital qui se fout de la charité.",
+      "answer": "The pot calling the kettle black."
+    },
+    {
+      "question": "Être au courant de quelque chose.",
+      "answer": "To be aware of something."
+    },
+    {
+      "question": "Se mettre en quatre.",
+      "answer": "To go out of one's way."
+    },
+    {
+      "question": "Avoir le vent en poupe.",
+      "answer": "To have the wind in one's sails."
+    },
+    {
+      "question": "Tourner la page.",
+      "answer": "To turn the page, move on."
+    },
+    {
+      "question": "Faire l'école buissonnière.",
+      "answer": "To play hooky."
+    },
+    {
+      "question": "Avoir la main verte.",
+      "answer": "To have a green thumb."
+    },
+    {
+      "question": "Jeter l'éponge.",
+      "answer": "To throw in the towel."
+    },
+    {
+      "question": "Se creuser la tête.",
+      "answer": "To rack one's brain."
+    },
+    {
+      "question": "Poser un lapin.",
+      "answer": "To stand someone up."
+    },
+    {
+      "question": "Rendre la pareille.",
+      "answer": "To return the favor."
+    },
+    {
+      "question": "Avoir le nez en l'air.",
+      "answer": "To be distracted."
+    },
+    {
+      "question": "Ne pas savoir sur quel pied danser.",
+      "answer": "Not to know what to do."
+    }
+  ]
+}
             ];
 
             // DOM Elements
@@ -1277,6 +5960,12 @@
             const swapDirectionBtn = document.getElementById('swap-direction');
             const swapIndicator = document.getElementById('swap-indicator');
             
+            // Reset progress elements
+            const resetProgressBtn = document.getElementById('reset-progress-btn');
+            const resetModal = document.getElementById('reset-confirm-modal');
+            const resetCancelBtn = document.getElementById('reset-cancel');
+            const resetConfirmBtn = document.getElementById('reset-confirm');
+            
             // FAB buttons
             const fabChangeSet = document.getElementById('fab-change-set');
             const fabSwap = document.getElementById('fab-swap');
@@ -1324,6 +6013,32 @@
             // Save achievements to localStorage
             function saveAchievements() {
                 localStorage.setItem('studyMasterAchievements', JSON.stringify(achievements));
+            }
+            
+            // Reset all progress
+            function resetAllProgress() {
+                // Reset achievements
+                questionSets.forEach((set, index) => {
+                    achievements[`set${index}`] = {
+                        quiz: 0,
+                        typeAnswer: 0
+                    };
+                });
+                
+                // Save reset achievements
+                saveAchievements();
+                
+                // Clear saved state
+                localStorage.removeItem('studyMasterState');
+                
+                // Update UI
+                generateSetCards();
+                
+                // Close modal
+                resetModal.style.display = 'none';
+                
+                // Show success message
+                alert('All progress has been reset successfully!');
             }
             
             // Save current app state
@@ -1560,6 +6275,17 @@
                 });
             });
             
+            // Reset progress button
+            resetProgressBtn.addEventListener('click', function() {
+                resetModal.style.display = 'flex';
+            });
+            
+            resetCancelBtn.addEventListener('click', function() {
+                resetModal.style.display = 'none';
+            });
+            
+            resetConfirmBtn.addEventListener('click', resetAllProgress);
+            
             // Swap direction button
             swapDirectionBtn.addEventListener('click', function() {
                 isSwapped = !isSwapped;
@@ -1771,6 +6497,13 @@
                 } else {
                     noOptionsProgressBar.style.display = 'none';
                 }
+                
+                // Show reset button only in set selection view
+                if (view.id === 'set-selection-view') {
+                    resetProgressBtn.style.display = 'block';
+                } else {
+                    resetProgressBtn.style.display = 'none';
+                }
             }
             
             function initializeFlashcardView() {
@@ -1860,7 +6593,7 @@
                 // Create a shuffled copy of the questions for this session
                 sessionQuestions = [...questionSets[currentSetIndex].questions];
                 for (let i = sessionQuestions.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
+                    const j = Math.floor(Math.random() (i + 1));
                     [sessionQuestions[i], sessionQuestions[j]] = [sessionQuestions[j], sessionQuestions[i]];
                 }
                 
@@ -1881,7 +6614,7 @@
                 // Create a shuffled copy of the questions for this session
                 sessionQuestions = [...questionSets[currentSetIndex].questions];
                 for (let i = sessionQuestions.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
+                    const j = Math.floor(Math.random() (i + 1));
                     [sessionQuestions[i], sessionQuestions[j]] = [sessionQuestions[j], sessionQuestions[i]];
                 }
                 
@@ -1935,7 +6668,7 @@
                 
                 // Shuffle the other answers
                 for (let i = otherAnswers.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
+                    const j = Math.floor(Math.random() (i + 1));
                     [otherAnswers[i], otherAnswers[j]] = [otherAnswers[j], otherAnswers[i]];
                 }
                 
@@ -1953,7 +6686,7 @@
                 
                 // Shuffle the options so the correct answer isn't always first
                 for (let i = options.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
+                    const j = Math.floor(Math.random() (i + 1));
                     [options[i], options[j]] = [options[j], options[i]];
                 }
                 
