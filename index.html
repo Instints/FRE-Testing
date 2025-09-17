@@ -777,14 +777,12 @@
             z-index: 10;
         }
 
-        /* FAB Buttons */
+        /* FAB Buttons - Modified for top and bottom positioning */
         .fab {
             display: none;
             position: fixed;
             width: 60px;
             height: 60px;
-            bottom: 20px;
-            right: 20px;
             background-color: #3498db;
             color: white;
             border-radius: 50%;
@@ -798,24 +796,34 @@
             align-items: center;
         }
 
-        .fab-left {
-            right: auto;
+        /* Top FAB buttons */
+        .fab-top {
+            top: 20px;
+        }
+
+        .fab-top-left {
             left: 20px;
             background-color: #16a085;
         }
 
-        .fab-swap {
-            bottom: 90px;
+        .fab-top-right {
+            right: 20px;
+            background-color: #f39c12;
+        }
+
+        /* Bottom FAB buttons (only for language and end quiz) */
+        .fab-bottom {
+            bottom: 20px;
+        }
+
+        .fab-bottom-left {
+            left: 20px;
             background-color: #9b59b6;
         }
 
-        .fab-end-quiz {
+        .fab-bottom-right {
+            right: 20px;
             background-color: #e74c3c;
-        }
-
-        .fab-change-mode {
-            bottom: 160px;
-            background-color: #f39c12;
         }
 
         @media (max-width: 768px) {
@@ -1055,15 +1063,17 @@
                 </div>
             </div>
             
-            <!-- FAB Buttons for Mobile -->
-            <button class="fab fab-left" id="fab-change-set">
+            <!-- FAB Buttons for Mobile - Top positioned -->
+            <button class="fab fab-top fab-top-left" id="fab-change-set">
                 <i class="fas fa-exchange-alt"></i>
             </button>
-            <button class="fab fab-swap" id="fab-swap">
-                <i class="fas fa-sync-alt"></i>
-            </button>
-            <button class="fab fab-change-mode" id="fab-change-mode">
+            <button class="fab fab-top fab-top-right" id="fab-change-mode">
                 <i class="fas fa-cog"></i>
+            </button>
+            
+            <!-- FAB Buttons for Mobile - Bottom positioned (language mode only) -->
+            <button class="fab fab-bottom fab-bottom-left" id="fab-swap">
+                <i class="fas fa-sync-alt"></i>
             </button>
         </div>
 
@@ -1087,12 +1097,14 @@
                 <div id="feedback-container"></div>
             </div>
             
-            <!-- FAB Buttons for Mobile -->
-            <button class="fab fab-end-quiz" id="fab-end-quiz">
-                <i class="fas fa-stop"></i>
-            </button>
-            <button class="fab fab-left" id="fab-quiz-change-set">
+            <!-- FAB Buttons for Mobile - Top positioned -->
+            <button class="fab fab-top fab-top-left" id="fab-quiz-change-set">
                 <i class="fas fa-exchange-alt"></i>
+            </button>
+            
+            <!-- FAB Buttons for Mobile - Bottom positioned (end quiz only) -->
+            <button class="fab fab-bottom fab-bottom-right" id="fab-end-quiz">
+                <i class="fas fa-stop"></i>
             </button>
         </div>
 
@@ -1121,12 +1133,14 @@
                 </div>
             </div>
             
-            <!-- FAB Buttons for Mobile -->
-            <button class="fab fab-end-quiz" id="fab-no-options-end-quiz">
-                <i class="fas fa-stop"></i>
-            </button>
-            <button class="fab fab-left" id="fab-no-options-change-set">
+            <!-- FAB Buttons for Mobile - Top positioned -->
+            <button class="fab fab-top fab-top-left" id="fab-no-options-change-set">
                 <i class="fas fa-exchange-alt"></i>
+            </button>
+            
+            <!-- FAB Buttons for Mobile - Bottom positioned (end quiz only) -->
+            <button class="fab fab-bottom fab-bottom-right" id="fab-no-options-end-quiz">
+                <i class="fas fa-stop"></i>
             </button>
         </div>
 
@@ -1284,6 +1298,7 @@
             let isSwapped = false; // Track if question/answer are swapped
             let touchStartX = 0;
             let touchEndX = 0;
+            let quizEndedEarly = false; // Track if quiz was ended early
             
             // Color options for quiz
             const optionColors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
@@ -1375,8 +1390,15 @@
                     '<i class="fas fa-exchange-alt"></i> Switch to English Mode';
             }
             
-            // Update achievement for current set and mode
+            // Update achievement for current set and mode - only if quiz was not ended early
             function updateAchievement(score) {
+                // Don't update achievements if quiz was ended early
+                if (quizEndedEarly) {
+                    const setKey = `set${currentSetIndex}`;
+                    const modeKey = currentMode === 'quiz' ? 'quiz' : 'typeAnswer';
+                    return achievements[setKey][modeKey]; // Return current best score without updating
+                }
+                
                 const setKey = `set${currentSetIndex}`;
                 const modeKey = currentMode === 'quiz' ? 'quiz' : 'typeAnswer';
                 
@@ -1567,6 +1589,7 @@
             });
             
             restartQuizBtn.addEventListener('click', () => {
+                quizEndedEarly = false; // Reset the early end flag
                 if (currentMode === 'quiz') {
                     initializeQuiz();
                     showView(quizView);
@@ -1844,6 +1867,7 @@
                 currentQuestionIndex = 0;
                 userAnswers = new Array(sessionQuestions.length).fill(null);
                 selectedOptionIndex = null;
+                quizEndedEarly = false; // Reset the early end flag
                 
                 // Show best score
                 const setKey = `set${currentSetIndex}`;
@@ -1863,6 +1887,7 @@
                 
                 currentQuestionIndex = 0;
                 userAnswers = new Array(sessionQuestions.length).fill(null);
+                quizEndedEarly = false; // Reset the early end flag
                 
                 // Show best score
                 const setKey = `set${currentSetIndex}`;
@@ -2118,6 +2143,8 @@
             }
             
             function endQuizEarly() {
+                quizEndedEarly = true; // Set the flag to indicate quiz was ended early
+                
                 // Calculate score based on answered questions only
                 let answeredCount = 0;
                 let correctCount = 0;
@@ -2146,17 +2173,19 @@
                 
                 const score = Math.round((correctCount / answeredCount) * 100);
                 
-                // Update achievement
+                // Update achievement (won't actually update if quiz ended early)
                 const bestScore = updateAchievement(score);
                 
                 // Update results view
                 scorePercentage.textContent = `${score}%`;
                 scoreDescription.textContent = `You answered ${correctCount} out of ${answeredCount} questions correctly`;
                 
-                // Show if this is a new best score
-                if (score >= bestScore) {
+                // Show if this is a new best score (only if quiz was completed)
+                if (!quizEndedEarly && score >= bestScore) {
                     scoreDescription.textContent += score === bestScore ? 
                         ` (Your personal best!)` : ` (New personal best!)`;
+                } else if (quizEndedEarly) {
+                    scoreDescription.textContent += ` (Quiz ended early)`;
                 }
                 
                 // Clear previous incorrect questions
@@ -2186,6 +2215,8 @@
             }
             
             function finishQuiz() {
+                quizEndedEarly = false; // Reset the early end flag for completed quizzes
+                
                 // Calculate score
                 let correctCount = 0;
                 const incorrect = [];
