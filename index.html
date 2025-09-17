@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyMaster - French Verbs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #16a085;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+            
+            --option-red: #e74c3c;
+            --option-blue: #3498db;
+            --option-green: #2ecc71;
+            --option-yellow: #f1c40f;
+            --option-purple: #9b59b6;
+            --option-orange: #e67e22;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: #ecf0f1;
+            min-height: 100vh;
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        /* Dynamic font sizes */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem !important;
+            }
+            
+            .tagline {
+                font-size: 1rem !important;
+                margin-bottom: 10px !important;
+            }
+            
+            header {
+                margin-bottom: 10px !important;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            color: #ecf0f1;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+
+        .view {
+            display: none;
+            background: #34495e;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            min-height: 500px;
+            position: relative;
+        }
+
+        .active-view {
+            display: block;
+        }
+
+        /* Set Selection View */
+        .set-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .set-card {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .set-card.bronze {
+            background: linear-gradient(135deg, #794b1d 0%, #cd7f32 100%);
+        }
+
+        .set-card.silver {
+            background: linear-gradient(135deg, #4f4f4f 0%, #c0c0c0 100%);
+        }
+
+        .set-card.gold {
+            background: linear-gradient(135deg, #a66729 0%, #d6a100 100%);
+        }
+
+        .set-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .set-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .set-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .set-count {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .set-badges {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .set-badge {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+        }
+
+        .set-badge.bronze {
+            background: #cd7f32;
+        }
+
+        .set-badge.silver {
+            background: #c0c0c0;
+        }
+
+        .set-badge.gold {
+            background: #ffd700;
+        }
+
+        /* Mode Selection View */
+        .mode-selection {
+            text-align: center;
+        }
+
+        .mode-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .mode-card {
+            background: #2c3e50;
+            border-radius: 15px;
+            padding: 30px;
+            width: 250px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 3px solid transparent;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-10px);
+            border-color: #3498db;
+        }
+
+        .mode-icon {
+            font-size: 3rem;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .mode-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #ecf0f1;
+        }
+
+        .mode-desc {
+            color: #bdc3c7;
+        }
+
+        /* Flashcard View */
+        .flashcard-container {
+            display: flex;
+            gap: 20px;
+            position: relative;
+        }
+
+        .question-sidebar {
+            width: 250px;
+            background: #2c3e50;
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .question-sidebar .search-container {
+            position: sticky;
+            top: 0;
+            background: #2c3e50;
+            padding-bottom: 10px;
+            z-index: 10;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .question-sidebar .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .question-sidebar .search-input {
+            width: 100%;
+            padding: 10px;
+            padding-right: 40px;
+            border-radius: 5px;
+            border: 1px solid #34495e;
+            background: #ecf0f1;
+        }
+
+        .question-sidebar .search-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .search-reset {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+        }
+
+        .search-reset:hover {
+            color: #e74c3c;
+        }
+
+        .backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        .backdrop.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .question-sidebar {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 80%;
+                height: 100%;
+                max-height: 100%;
+                z-index: 100;
+                border-radius: 0;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            }
+            
+            .question-sidebar.active {
+                left: 0;
+            }
+        }
+
+        .question-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #34495e;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .question-item:hover {
+            background: #4a6278;
+        }
+
+        .question-item.active {
+            background: #3498db;
+            color: white;
+            border-left-color: #ecf0f1;
+        }
+
+        .question-text {
+            font-weight: bold;
+        }
+
+        .answer-text {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+
+        .card-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .question-text-large {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .answer-text-large {
+            font-size: 1.3rem;
+        }
+
+        .card-controls {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Card animation classes */
+        .card.slide-left {
+            animation: slideLeft 0.5s forwards;
+        }
+
+        .card.slide-right {
+            animation: slideRight 0.5s forwards;
+        }
+
+        @keyframes slideLeft {
+            0% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(-100%); opacity: 0; }
+        }
+
+        @keyframes slideRight {
+            0% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+
+        /* Quiz View */
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: #2c3e50;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #3498db;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 1.2rem;
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .best-score {
+            font-size: 1rem;
+            color: #bdc3c7;
+        }
+
+        .quiz-question {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #ecf0f1;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            padding: 15px;
+            background: #2c3e50;
+            border: 2px solid #34495e;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #ecf0f1;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option:hover {
+            background: #4a6278;
+            border-color: #3498db;
+        }
+
+        .option.selected {
+            background: #3498db;
+            color: white;
+            border-color: #ecf0f1;
+        }
+
+        /* Updated styling for quiz options */
+        .option.correct {
+            background: #27ae60 !important;
+            color: white !important;
+            border: none !important;
+            opacity: 1 !important;
+        }
+
+        .option.incorrect {
+            background: #e74c3c !important;
+            color: white !important;
+            border: none !important;
+            opacity: 1 !important;
+        }
+
+        .option.faded {
+            background: #7f8c8d !important;
+            color: #ecf0f1 !important;
+            border: none !important;
+            opacity: 0.5 !important;
+        }
+
+        /* Quiz option colors */
+        .option[data-color="red"] { background-color: var(--option-red); }
+        .option[data-color="blue"] { background-color: var(--option-blue); }
+        .option[data-color="green"] { background-color: var(--option-green); }
+        .option[data-color="yellow"] { background-color: var(--option-yellow); }
+        .option[data-color="purple"] { background-color: var(--option-purple); }
+        .option[data-color="orange"] { background-color: var(--option-orange); }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .feedback {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            background: rgba(39, 174, 96, 0.2);
+            color: #2ecc71;
+            border: 2px solid #27ae60;
+        }
+
+        .feedback.incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 2px solid #c0392b;
+        }
+
+        /* Quiz Without Options View */
+        .quiz-no-options-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            align-items: center;
+        }
+
+        .answer-input-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #34495e;
+            border-radius: 8px;
+            background: #2c3e50;
+            color: #ecf0f1;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: #4a6278;
+        }
+
+        /* Results View */
+        .results-container {
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #3498db;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .score-percentage {
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+
+        .incorrect-questions {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .incorrect-title {
+            font-size: 1.5rem;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .incorrect-item {
+            background: #2c3e50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .question-incorrect {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #ecf0f1;
+        }
+
+        .answer-compare {
+            display: flex;
+            gap: 15px;
+        }
+
+        .user-answer, .correct-answer {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .user-answer {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .correct-answer {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #7f8c8d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #95a5a6;
+        }
+
+        .btn-large {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+        }
+
+        .btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .change-set-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(44, 62, 80, 0.7);
+            color: #ecf0f1;
+            border: 1px solid #3498db;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .toggle-questions-btn {
+            display: none;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .quiz-mode-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(44, 62, 80, 0.7);
+            color: #ecf0f1;
+            border: 1px solid #3498db;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* FAB Buttons */
+        .fab {
+            display: none;
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 20px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fab-left {
+            right: auto;
+            left: 20px;
+            background-color: #16a085;
+        }
+
+        .fab-swap {
+            bottom: 90px;
+            background-color: #9b59b6;
+        }
+
+        .fab-end-quiz {
+            background-color: #e74c3c;
+        }
+
+        .fab-change-mode {
+            bottom: 160px;
+            background-color: #f39c12;
+        }
+
+        @media (max-width: 768px) {
+            .toggle-questions-btn {
+                display: block;
+            }
+            
+            .change-set-btn, .quiz-mode-btn {
+                display: none;
+            }
+            
+            .fab {
+                display: flex;
+            }
+            
+            .change-set-btn.fab, .quiz-mode-btn.fab {
+                display: flex;
+            }
+            
+            .quiz-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .progress-text, .best-score {
+                width: 100%;
+                text-align: left;
+            }
+        }
+
+        .view-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ecf0f1;
+            font-size: 1.8rem;
+        }
+
+        /* Quiz Options Selection View */
+        .quiz-options-view {
+            text-align: center;
+        }
+
+        .options-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .options-title {
+            font-size: 1.5rem;
+            color: #ecf0f1;
+            margin-bottom: 10px;
+        }
+
+        .option-count-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .option-count-btn {
+            padding: 15px 25px;
+            background: #2c3e50;
+            border: 2px solid #34495e;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            color: #ecf0f1;
+            min-width: 80px;
+        }
+
+        .option-count-btn:hover {
+            background: #4a6278;
+            border-color: #3498db;
+        }
+
+        .option-count-btn.selected {
+            background: #3498db;
+            color: white;
+            border-color: #ecf0f1;
+        }
+
+        /* Grid layouts for quiz options */
+        .options-container.grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .options-container.grid-4 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .options-container.grid-6 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .options-container.grid-4 {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+            
+            .options-container.grid-6 {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+        }
+
+        /* Match highlighting */
+        .match {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        
+        /* Swap button in mode selection */
+        .swap-btn {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* Progress bar always visible in quiz modes */
+        .quiz-view .progress-bar-container,
+        .quiz-no-options-view .progress-bar-container {
+            display: block !important;
+        }
+        
+        /* Hide progress text in quiz modes */
+        .quiz-view .progress-text,
+        .quiz-no-options-view .progress-text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>StudyMaster</h1>
+            <p class="tagline">Master French verbs with interactive flashcards and quizzes</p>
+        </header>
+
+        <!-- Set Selection View -->
+        <div id="set-selection-view" class="view active-view">
+            <h2 class="view-title">Select a Question Set</h2>
+            <div class="set-grid" id="set-grid">
+                <!-- Set cards will be dynamically generated -->
+            </div>
+        </div>
+
+        <!-- Mode Selection View -->
+        <div id="mode-selection-view" class="view">
+            <h2 class="view-title">Select Study Mode</h2>
+            <div class="swap-btn">
+                <span id="swap-indicator">French Mode</span>
+                <button class="btn btn-secondary" id="swap-direction">
+                    <i class="fas fa-exchange-alt"></i> Switch to English Mode
+                </button>
+            </div>
+            <div class="mode-options">
+                <div class="mode-card" data-mode="flashcard">
+                    <div class="mode-icon"><i class="fas fa-clone"></i></div>
+                    <div class="mode-title">Flashcards</div>
+                    <div class="mode-desc">Review verbs one by one and flip to see translations</div>
+                </div>
+                <div class="mode-card" data-mode="quiz">
+                    <div class="mode-icon"><i class="fas fa-tasks"></i></div>
+                    <div class="mode-title">Quiz</div>
+                    <div class="mode-desc">Test your knowledge with multiple choice questions</div>
+                </div>
+                <div class="mode-card" data-mode="quiz-no-options">
+                    <div class="mode-icon"><i class="fas fa-keyboard"></i></div>
+                    <div class="mode-title">Type Answer Quiz</div>
+                    <div class="mode-desc">Test your knowledge by typing the translations</div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" id="back-to-sets">Back to Sets</button>
+            </div>
+        </div>
+
+        <!-- Quiz Options Selection View -->
+        <div id="quiz-options-view" class="view">
+            <h2 class="view-title">Select Number of Answer Options</h2>
+            <div class="options-selection">
+                <div class="options-title">How many answer options would you like per question?</div>
+                <div class="option-count-buttons">
+                    <button class="option-count-btn" data-options="2">2 Options</button>
+                    <button class="option-count-btn" data-options="4">4 Options</button>
+                    <button class="option-count-btn" data-options="6">6 Options</button>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" id="back-to-modes">Back to Modes</button>
+            </div>
+        </div>
+
+        <!-- Flashcard View -->
+        <div id="flashcard-view" class="view">
+            <button class="quiz-mode-btn" id="flashcard-to-quiz">Quiz Mode</button>
+            <button class="change-set-btn" id="flashcard-change-set">Change Set</button>
+            <button class="toggle-questions-btn" id="toggle-questions">Show Verbs</button>
+            
+            <h2 class="view-title">Flashcard Mode</h2>
+            <div class="flashcard-container">
+                <div class="backdrop" id="sidebar-backdrop"></div>
+                <div class="question-sidebar" id="question-sidebar">
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <input type="text" class="search-input" id="question-search" placeholder="Search verbs or translations...">
+                            <button class="search-reset" id="reset-search">×</button>
+                        </div>
+                    </div>
+                    <div id="question-list">
+                        <!-- Questions will be populated here -->
+                    </div>
+                </div>
+                <div class="card-area">
+                    <div class="card" id="flashcard">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="question-text-large" id="card-question">être</div>
+                                <p class="hint">Click the card to reveal the translation</p>
+                            </div>
+                            <div class="card-back">
+                                <div class="answer-text-large" id="card-answer">to be</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-controls">
+                        <button class="btn btn-secondary" id="prev-card">Previous</button>
+                        <button class="btn btn-primary" id="next-card">Next</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAB Buttons for Mobile -->
+            <button class="fab fab-left" id="fab-change-set">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
+            <button class="fab fab-swap" id="fab-swap">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button class="fab fab-change-mode" id="fab-change-mode">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+
+        <!-- Quiz View -->
+        <div id="quiz-view" class="view">
+            <button class="change-set-btn" id="quiz-change-set">Change Set</button>
+            
+            <div class="quiz-container">
+                <div class="progress-bar-container" id="quiz-progress-bar">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="quiz-header">
+                    <div class="progress-text" id="progress-text">Question 1 of 200</div>
+                    <div class="best-score" id="best-score">Best: Not set</div>
+                </div>
+                <div class="quiz-question" id="quiz-question">What is the English translation of "être"?</div>
+                <div class="options-container" id="options-container">
+                    <!-- Options will be populated here -->
+                </div>
+                
+                <div id="feedback-container"></div>
+            </div>
+            
+            <!-- FAB Buttons for Mobile -->
+            <button class="fab fab-end-quiz" id="fab-end-quiz">
+                <i class="fas fa-stop"></i>
+            </button>
+            <button class="fab fab-left" id="fab-quiz-change-set">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
+        </div>
+
+        <!-- Quiz Without Options View -->
+        <div id="quiz-no-options-view" class="view">
+            <button class="change-set-btn" id="quiz-no-options-change-set">Change Set</button>
+            
+            <div class="quiz-no-options-container">
+                <div class="progress-bar-container" id="no-options-progress-bar">
+                    <div class="progress-bar" id="no-options-progress-bar-inner"></div>
+                </div>
+                <div class="quiz-header">
+                    <div class="progress-text" id="no-options-progress-text">Question 1 of 200</div>
+                    <div class="best-score" id="no-options-best-score">Best: Not set</div>
+                </div>
+                <div class="quiz-question" id="no-options-question">What is the English translation of "être"?</div>
+                
+                <div class="answer-input-container">
+                    <input type="text" class="answer-input" id="answer-input" placeholder="Type the translation here...">
+                </div>
+                
+                <div id="no-options-feedback-container"></div>
+                
+                <div class="quiz-controls">
+                    <button class="btn btn-primary" id="submit-answer" disabled>Submit Answer</button>
+                </div>
+            </div>
+            
+            <!-- FAB Buttons for Mobile -->
+            <button class="fab fab-end-quiz" id="fab-no-options-end-quiz">
+                <i class="fas fa-stop"></i>
+            </button>
+            <button class="fab fab-left" id="fab-no-options-change-set">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
+        </div>
+
+        <!-- Results View -->
+        <div id="results-view" class="view">
+            <button class="change-set-btn" id="results-change-set">Change Set</button>
+            
+            <div class="results-container">
+                <h2 class="view-title">Quiz Completed!</h2>
+                <div class="score-circle">
+                    <div class="score-percentage" id="score-percentage">80%</div>
+                    <div class="score-text">Score</div>
+                </div>
+                <p id="score-description">You answered 160 out of 200 questions correctly</p>
+                
+                <div class="incorrect-questions" id="incorrect-questions">
+                    <h3 class="incorrect-title">Verbs to Review</h3>
+                    <!-- Incorrect questions will be populated here -->
+                </div>
+                
+                <div class="nav-buttons">
+                    <button class="btn btn-primary btn-large" id="restart-quiz">Restart Quiz</button>
+                    <button class="btn btn-secondary" id="results-to-mode">Change Mode</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // French verbs question sets with synonyms and accents
+            const questionSets = [
+                {
+                    title: "Translating French Verbs",
+                    icon: "fas fa-language",
+                    questions: [
+                        { question: "être", answer: "to be" },
+                        { question: "avoir", answer: "to have" },
+                        { question: "aller", answer: "to go" },
+                        { question: "faire", answer: "to do/to make" },
+                        { question: "dire", answer: "to say/to tell" },
+                        { question: "pouvoir", answer: "to be able to/can" },
+                        { question: "vouloir", answer: "to want" },
+                        { question: "savoir", answer: "to know" },
+                        { question: "voir", answer: "to see" },
+                        { question: "venir", answer: "to come" }
+                    ]
+                },
+                {
+                    title: "People & Family",
+                    icon: "fas fa-users",
+                    questions: [
+                        { question: "les gens", answer: "people" },
+                        { question: "les hommes", answer: "men" },
+                        { question: "les femmes", answer: "women" },
+                        { question: "les enfants", answer: "children" },
+                        { question: "la famille", answer: "family" },
+                        { question: "le père", answer: "father" },
+                        { question: "la mère", answer: "mother" },
+                        { question: "le frère", answer: "brother" },
+                        { question: "la sœur", answer: "sister" }
+                    ]
+                },
+                {
+                    title: "Food and Drinks",
+                    icon: "fas fa-utensils",
+                    questions: [
+                        { question: "les aliments", answer: "foods" },
+                        { question: "les boissons", answer: "drinks" },
+                        { question: "l'eau", answer: "water" },
+                        { question: "le pain", answer: "bread" },
+                        { question: "le fromage", answer: "cheese" },
+                        { question: "le vin", answer: "wine" },
+                        { question: "la viande", answer: "meat" },
+                        { question: "les légumes", answer: "vegetables" },
+                        { question: "les fruits", answer: "fruits" }
+                    ]
+                }
+            ];
+
+            // DOM Elements
+            const views = document.querySelectorAll('.view');
+            const setSelectionView = document.getElementById('set-selection-view');
+            const modeSelectionView = document.getElementById('mode-selection-view');
+            const quizOptionsView = document.getElementById('quiz-options-view');
+            const flashcardView = document.getElementById('flashcard-view');
+            const quizView = document.getElementById('quiz-view');
+            const quizNoOptionsView = document.getElementById('quiz-no-options-view');
+            const resultsView = document.getElementById('results-view');
+            
+            const setGrid = document.getElementById('set-grid');
+            const modeCards = document.querySelectorAll('.mode-card');
+            const optionCountButtons = document.querySelectorAll('.option-count-btn');
+            const questionList = document.getElementById('question-list');
+            const questionSearch = document.getElementById('question-search');
+            const resetSearch = document.getElementById('reset-search');
+            const flashcard = document.getElementById('flashcard');
+            const cardQuestion = document.getElementById('card-question');
+            const cardAnswer = document.getElementById('card-answer');
+            const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+            
+            const progressText = document.getElementById('progress-text');
+            const bestScoreText = document.getElementById('best-score');
+            const quizQuestion = document.getElementById('quiz-question');
+            const optionsContainer = document.getElementById('options-container');
+            const feedbackContainer = document.getElementById('feedback-container');
+            const quizProgressBar = document.getElementById('quiz-progress-bar');
+            const progressBar = document.getElementById('progress-bar');
+            
+            const noOptionsProgressText = document.getElementById('no-options-progress-text');
+            const noOptionsBestScoreText = document.getElementById('no-options-best-score');
+            const noOptionsQuestion = document.getElementById('no-options-question');
+            const answerInput = document.getElementById('answer-input');
+            const submitAnswerBtn = document.getElementById('submit-answer');
+            const noOptionsFeedbackContainer = document.getElementById('no-options-feedback-container');
+            const noOptionsProgressBar = document.getElementById('no-options-progress-bar');
+            const noOptionsProgressBarInner = document.getElementById('no-options-progress-bar-inner');
+            
+            const scorePercentage = document.getElementById('score-percentage');
+            const scoreDescription = document.getElementById('score-description');
+            const incorrectQuestions = document.getElementById('incorrect-questions');
+            
+            const backToSetsBtn = document.getElementById('back-to-sets');
+            const backToModesBtn = document.getElementById('back-to-modes');
+            const restartQuizBtn = document.getElementById('restart-quiz');
+            const resultsToModeBtn = document.getElementById('results-to-mode');
+            
+            const changeSetBtns = document.querySelectorAll('.change-set-btn');
+            const toggleQuestionsBtn = document.getElementById('toggle-questions');
+            const questionSidebar = document.getElementById('question-sidebar');
+            const prevCardBtn = document.getElementById('prev-card');
+            const nextCardBtn = document.getElementById('next-card');
+            const flashcardToQuizBtn = document.getElementById('flashcard-to-quiz');
+            const swapDirectionBtn = document.getElementById('swap-direction');
+            const swapIndicator = document.getElementById('swap-indicator');
+            
+            // FAB buttons
+            const fabChangeSet = document.getElementById('fab-change-set');
+            const fabSwap = document.getElementById('fab-swap');
+            const fabEndQuiz = document.getElementById('fab-end-quiz');
+            const fabQuizChangeSet = document.getElementById('fab-quiz-change-set');
+            const fabNoOptionsEndQuiz = document.getElementById('fab-no-options-end-quiz');
+            const fabNoOptionsChangeSet = document.getElementById('fab-no-options-change-set');
+            const fabChangeMode = document.getElementById('fab-change-mode');
+
+            // Current state
+            let currentSetIndex = 0;
+            let currentMode = '';
+            let currentQuestionIndex = 0;
+            let userAnswers = [];
+            let selectedOptionIndex = null;
+            let sessionQuestions = []; // Will hold the questions for the current session
+            let quizOptionCount = 4; // Default number of options for quiz mode
+            let achievements = {}; // Will store user achievements
+            let isSwapped = false; // Track if question/answer are swapped
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            // Color options for quiz
+            const optionColors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+
+            // Initialize achievements from localStorage
+            function initAchievements() {
+                const storedAchievements = localStorage.getItem('studyMasterAchievements');
+                if (storedAchievements) {
+                    achievements = JSON.parse(storedAchievements);
+                } else {
+                    // Initialize empty achievements object
+                    achievements = {};
+                    questionSets.forEach((set, index) => {
+                        achievements[`set${index}`] = {
+                            quiz: 0,
+                            typeAnswer: 0
+                        };
+                    });
+                    saveAchievements();
+                }
+            }
+            
+            // Save achievements to localStorage
+            function saveAchievements() {
+                localStorage.setItem('studyMasterAchievements', JSON.stringify(achievements));
+            }
+            
+            // Save current app state
+            function saveAppState() {
+                const state = {
+                    currentSetIndex,
+                    currentMode,
+                    currentQuestionIndex,
+                    userAnswers,
+                    sessionQuestions,
+                    quizOptionCount,
+                    isSwapped,
+                    view: document.querySelector('.view.active-view').id
+                };
+                localStorage.setItem('studyMasterState', JSON.stringify(state));
+            }
+            
+            // Load app state
+            function loadAppState() {
+                try {
+                    const state = localStorage.getItem('studyMasterState');
+                    if (state) {
+                        const parsed = JSON.parse(state);
+                        currentSetIndex = parsed.currentSetIndex;
+                        currentMode = parsed.currentMode;
+                        currentQuestionIndex = parsed.currentQuestionIndex;
+                        userAnswers = parsed.userAnswers;
+                        sessionQuestions = parsed.sessionQuestions;
+                        quizOptionCount = parsed.quizOptionCount;
+                        isSwapped = parsed.isSwapped;
+                        
+                        // Update swap indicator
+                        updateSwapIndicator();
+                        
+                        // Show the saved view
+                        showView(document.getElementById(parsed.view));
+                        
+                        // Restore the appropriate mode
+                        if (currentMode === 'flashcard') {
+                            initializeFlashcardView();
+                            showFlashcard(currentQuestionIndex);
+                        } else if (currentMode === 'quiz') {
+                            showQuizQuestion(currentQuestionIndex);
+                        } else if (currentMode === 'quiz-no-options') {
+                            showQuizNoOptionsQuestion(currentQuestionIndex);
+                        }
+                        
+                        return true;
+                    }
+                } catch (e) {
+                    console.error('Error loading app state:', e);
+                    // If state is corrupted, fall back to menu
+                    localStorage.removeItem('studyMasterState');
+                    showView(setSelectionView);
+                }
+                return false;
+            }
+            
+            // Update swap indicator text
+            function updateSwapIndicator() {
+                swapIndicator.textContent = isSwapped ? "English Mode" : "French Mode";
+                swapDirectionBtn.innerHTML = isSwapped ? 
+                    '<i class="fas fa-exchange-alt"></i> Switch to French Mode' : 
+                    '<i class="fas fa-exchange-alt"></i> Switch to English Mode';
+            }
+            
+            // Update achievement for current set and mode
+            function updateAchievement(score) {
+                const setKey = `set${currentSetIndex}`;
+                const modeKey = currentMode === 'quiz' ? 'quiz' : 'typeAnswer';
+                
+                if (score > achievements[setKey][modeKey]) {
+                    achievements[setKey][modeKey] = score;
+                    saveAchievements();
+                    updateSetCardColors();
+                }
+                
+                return achievements[setKey][modeKey];
+            }
+            
+            // Generate set cards dynamically
+            function generateSetCards() {
+                setGrid.innerHTML = '';
+                
+                questionSets.forEach((set, index) => {
+                    const setCard = document.createElement('div');
+                    setCard.className = 'set-card';
+                    setCard.dataset.set = index;
+                    
+                    // Add badges for achievements
+                    const setKey = `set${index}`;
+                    const badgesHtml = `
+                        <div class="set-badges">
+                            ${achievements[setKey].quiz === 100 ? '<div class="set-badge bronze" title="Perfect in Quiz Mode"><i class="fas fa-medal"></i></div>' : ''}
+                            ${achievements[setKey].typeAnswer === 100 ? '<div class="set-badge silver" title="Perfect in Type Answer Mode"><i class="fas fa-medal"></i></div>' : ''}
+                            ${achievements[setKey].quiz === 100 && achievements[setKey].typeAnswer === 100 ? '<div class="set-badge gold" title="Perfect in Both Modes"><i class="fas fa-trophy"></i></div>' : ''}
+                        </div>
+                    `;
+                    
+                    setCard.innerHTML = `
+                        ${badgesHtml}
+                        <div class="set-icon"><i class="${set.icon}"></i></div>
+                        <div class="set-title">${set.title}</div>
+                        <div class="set-count">${set.questions.length} questions</div>
+                    `;
+                    
+                    setCard.addEventListener('click', function() {
+                        currentSetIndex = parseInt(this.dataset.set);
+                        showView(modeSelectionView);
+                        saveAppState();
+                    });
+                    
+                    // Apply color based on achievements
+                    updateSetCardColor(setCard, index);
+                    
+                    setGrid.appendChild(setCard);
+                });
+            }
+            
+            // Update the color of a set card based on achievements
+            function updateSetCardColor(setCard, index) {
+                const setKey = `set${index}`;
+                setCard.classList.remove('bronze', 'silver', 'gold');
+                
+                if (achievements[setKey].quiz === 100 && achievements[setKey].typeAnswer === 100) {
+                    setCard.classList.add('gold');
+                } else if (achievements[setKey].typeAnswer === 100) {
+                    setCard.classList.add('silver');
+                } else if (achievements[setKey].quiz === 100) {
+                    setCard.classList.add('bronze');
+                }
+            }
+            
+            // Update all set card colors
+            function updateSetCardColors() {
+                document.querySelectorAll('.set-card').forEach((card, index) => {
+                    updateSetCardColor(card, index);
+                });
+            }
+            
+            // Normalize string for search (remove diacritics)
+            function normalizeString(str) {
+                return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            }
+            
+            // Highlight matching text
+            function highlightText(text, searchTerm) {
+                if (!searchTerm) return text;
+                
+                const normalizedText = normalizeString(text);
+                const normalizedSearch = normalizeString(searchTerm);
+                
+                const startIndex = normalizedText.indexOf(normalizedSearch);
+                if (startIndex === -1) return text;
+                
+                const endIndex = startIndex + searchTerm.length;
+                return text.substring(0, startIndex) + 
+                       '<span class="match">' + text.substring(startIndex, endIndex) + '</span>' + 
+                       text.substring(endIndex);
+            }
+            
+            // Filter and display questions based on search
+            function filterQuestions(searchTerm) {
+                const questionItems = document.querySelectorAll('.question-item');
+                let hasMatches = false;
+                
+                questionItems.forEach(item => {
+                    const questionText = item.dataset.question;
+                    const answerText = item.dataset.answer;
+                    
+                    const normalizedQuestion = normalizeString(questionText);
+                    const normalizedAnswer = normalizeString(answerText);
+                    const normalizedSearch = normalizeString(searchTerm);
+                    
+                    if (normalizedQuestion.includes(normalizedSearch) || normalizedAnswer.includes(normalizedSearch)) {
+                        // Highlight matches in both question and answer
+                        const highlightedQuestion = highlightText(questionText, searchTerm);
+                        const highlightedAnswer = highlightText(answerText, searchTerm);
+                        
+                        item.innerHTML = `
+                            <div class="question-text">${highlightedQuestion}</div>
+                            <div class="answer-text">${highlightedAnswer}</div>
+                        `;
+                        item.style.display = 'block';
+                        hasMatches = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                
+                return hasMatches;
+            }
+            
+            // Event Listeners
+            modeCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    currentMode = this.dataset.mode;
+                    
+                    if (currentMode === 'flashcard') {
+                        initializeFlashcardView();
+                        showView(flashcardView);
+                    } else if (currentMode === 'quiz') {
+                        showView(quizOptionsView);
+                    } else if (currentMode === 'quiz-no-options') {
+                        initializeQuizNoOptions();
+                        showView(quizNoOptionsView);
+                    }
+                    saveAppState();
+                });
+            });
+            
+            optionCountButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove selected class from all buttons
+                    optionCountButtons.forEach(btn => btn.classList.remove('selected'));
+                    
+                    // Add selected class to clicked button
+                    this.classList.add('selected');
+                    
+                    // Set the number of options
+                    quizOptionCount = parseInt(this.dataset.options);
+                    
+                    // Initialize and start the quiz
+                    initializeQuiz();
+                    showView(quizView);
+                    saveAppState();
+                });
+            });
+            
+            // Swap direction button
+            swapDirectionBtn.addEventListener('click', function() {
+                isSwapped = !isSwapped;
+                updateSwapIndicator();
+                
+                // If we're in flashcard view, update the current card
+                if (flashcardView.classList.contains('active-view')) {
+                    showFlashcard(currentQuestionIndex);
+                }
+                
+                saveAppState();
+            });
+            
+            backToSetsBtn.addEventListener('click', () => {
+                showView(setSelectionView);
+                saveAppState();
+            });
+            
+            backToModesBtn.addEventListener('click', () => {
+                showView(modeSelectionView);
+                saveAppState();
+            });
+            
+            resultsToModeBtn.addEventListener('click', () => {
+                showView(modeSelectionView);
+                saveAppState();
+            });
+            
+            restartQuizBtn.addEventListener('click', () => {
+                if (currentMode === 'quiz') {
+                    initializeQuiz();
+                    showView(quizView);
+                } else if (currentMode === 'quiz-no-options') {
+                    initializeQuizNoOptions();
+                    showView(quizNoOptionsView);
+                }
+                saveAppState();
+            });
+            
+            changeSetBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showView(setSelectionView);
+                    saveAppState();
+                });
+            });
+            
+            toggleQuestionsBtn.addEventListener('click', () => {
+                questionSidebar.classList.toggle('active');
+                sidebarBackdrop.classList.toggle('active');
+                toggleQuestionsBtn.textContent = questionSidebar.classList.contains('active') ? 'Hide Verbs' : 'Show Verbs';
+            });
+            
+            sidebarBackdrop.addEventListener('click', () => {
+                questionSidebar.classList.remove('active');
+                sidebarBackdrop.classList.remove('active');
+                toggleQuestionsBtn.textContent = 'Show Verbs';
+            });
+            
+            questionSearch.addEventListener('input', () => {
+                filterQuestions(questionSearch.value);
+            });
+            
+            resetSearch.addEventListener('click', () => {
+                questionSearch.value = '';
+                filterQuestions('');
+            });
+            
+            flashcard.addEventListener('click', () => {
+                flashcard.classList.toggle('flipped');
+            });
+            
+            // Swipe functionality for mobile flashcards
+            flashcard.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+            
+            flashcard.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+            
+            function handleSwipe() {
+                const minSwipeDistance = 50; // Minimum distance for a swipe to be registered
+                
+                if (touchStartX - touchEndX > minSwipeDistance) {
+                    // Swipe left - next card
+                    if (currentQuestionIndex < sessionQuestions.length - 1) {
+                        showFlashcard(currentQuestionIndex + 1, 'left');
+                    }
+                } 
+                
+                if (touchEndX - touchStartX > minSwipeDistance) {
+                    // Swipe right - previous card
+                    if (currentQuestionIndex > 0) {
+                        showFlashcard(currentQuestionIndex - 1, 'right');
+                    }
+                }
+            }
+            
+            prevCardBtn.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    showFlashcard(currentQuestionIndex - 1, 'right');
+                }
+                saveAppState();
+            });
+            
+            nextCardBtn.addEventListener('click', () => {
+                if (currentQuestionIndex < sessionQuestions.length - 1) {
+                    showFlashcard(currentQuestionIndex + 1, 'left');
+                }
+                saveAppState();
+            });
+            
+            // New event listener for switching to quiz mode from flashcard view
+            flashcardToQuizBtn.addEventListener('click', () => {
+                currentMode = 'quiz';
+                showView(quizOptionsView);
+                saveAppState();
+            });
+            
+            // Swap question and answer
+            fabSwap.addEventListener('click', () => {
+                isSwapped = !isSwapped;
+                updateSwapIndicator();
+                if (currentMode === 'flashcard') {
+                    showFlashcard(currentQuestionIndex);
+                }
+                saveAppState();
+            });
+            
+            // Change mode FAB
+            fabChangeMode.addEventListener('click', () => {
+                showView(modeSelectionView);
+                saveAppState();
+            });
+            
+            // End quiz early
+            fabEndQuiz.addEventListener('click', endQuizEarly);
+            fabNoOptionsEndQuiz.addEventListener('click', endQuizEarly);
+            
+            // FAB change set buttons
+            fabChangeSet.addEventListener('click', () => showView(setSelectionView));
+            fabQuizChangeSet.addEventListener('click', () => showView(setSelectionView));
+            fabNoOptionsChangeSet.addEventListener('click', () => showView(setSelectionView));
+            
+            // Quiz without options event listeners
+            answerInput.addEventListener('input', () => {
+                submitAnswerBtn.disabled = answerInput.value.trim() === '';
+            });
+            
+            answerInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !submitAnswerBtn.disabled) {
+                    submitAnswerBtn.click();
+                }
+            });
+            
+            submitAnswerBtn.addEventListener('click', handleAnswerSubmission);
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Only enable shortcuts if we're not in an input field
+                if (e.target.tagName !== 'INPUT') {
+                    // Arrow keys for flashcards
+                    if (flashcardView.classList.contains('active-view')) {
+                        if (e.key === 'ArrowLeft' && currentQuestionIndex > 0) {
+                            showFlashcard(currentQuestionIndex - 1, 'right');
+                        } else if (e.key === 'ArrowRight' && currentQuestionIndex < sessionQuestions.length - 1) {
+                            showFlashcard(currentQuestionIndex + 1, 'left');
+                        } else if (e.key === 'Enter' || e.key === ' ') {
+                            flashcard.classList.toggle('flipped');
+                        }
+                    }
+                    
+                    // Number keys for quiz options
+                    if (quizView.classList.contains('active-view')) {
+                        const key = parseInt(e.key);
+                        if (!isNaN(key) && key >= 1 && key <= quizOptionCount) {
+                            const optionElement = document.querySelectorAll('.option')[key - 1];
+                            if (optionElement && optionElement.style.pointerEvents !== 'none') {
+                                optionElement.click();
+                            }
+                        }
+                    }
+                    
+                    // Enter key for type answer quiz
+                    if (quizNoOptionsView.classList.contains('active-view') && e.key === 'Enter') {
+                        if (!submitAnswerBtn.disabled) {
+                            submitAnswerBtn.click();
+                        }
+                    }
+                }
+            });
+            
+            // Functions
+            function showView(view) {
+                views.forEach(v => v.classList.remove('active-view'));
+                view.classList.add('active-view');
+                
+                // Show/hide progress bars based on mode
+                if (view.id === 'quiz-view') {
+                    quizProgressBar.style.display = 'block';
+                } else {
+                    quizProgressBar.style.display = 'none';
+                }
+                
+                if (view.id === 'quiz-no-options-view') {
+                    noOptionsProgressBar.style.display = 'block';
+                } else {
+                    noOptionsProgressBar.style.display = 'none';
+                }
+            }
+            
+            function initializeFlashcardView() {
+                // Use the original order of questions (not shuffled)
+                sessionQuestions = [...questionSets[currentSetIndex].questions];
+                
+                // Clear previous questions
+                questionList.innerHTML = '';
+                
+                // Add questions to sidebar
+                sessionQuestions.forEach((q, index) => {
+                    const questionItem = document.createElement('div');
+                    questionItem.className = 'question-item' + (index === 0 ? ' active' : '');
+                    questionItem.dataset.question = isSwapped ? q.answer : q.question;
+                    questionItem.dataset.answer = isSwapped ? q.question : q.answer;
+                    
+                    questionItem.innerHTML = `
+                        <div class="question-text">${isSwapped ? q.answer : q.question}</div>
+                        <div class="answer-text">${isSwapped ? q.question : q.answer}</div>
+                    `;
+                    
+                    questionItem.addEventListener('click', () => {
+                        document.querySelectorAll('.question-item').forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        questionItem.classList.add('active');
+                        showFlashcard(index);
+                        // On mobile, close the sidebar after selection
+                        if (window.innerWidth <= 768) {
+                            questionSidebar.classList.remove('active');
+                            sidebarBackdrop.classList.remove('active');
+                            toggleQuestionsBtn.textContent = 'Show Verbs';
+                        }
+                    });
+                    questionList.appendChild(questionItem);
+                });
+                
+                // Show first flashcard
+                showFlashcard(0);
+            }
+            
+            function showFlashcard(index, direction = null) {
+                // If we're navigating to a new card, add slide animation
+                if (direction && index !== currentQuestionIndex) {
+                    // Add slide animation class
+                    flashcard.classList.add(`slide-${direction}`);
+                    
+                    // Wait for animation to complete before updating content
+                    setTimeout(() => {
+                        flashcard.classList.remove(`slide-${direction}`);
+                        updateFlashcardContent(index);
+                    }, 500);
+                } else {
+                    // No animation, just update content
+                    updateFlashcardContent(index);
+                }
+            }
+            
+            function updateFlashcardContent(index) {
+                const question = sessionQuestions[index];
+                cardQuestion.textContent = isSwapped ? question.answer : question.question;
+                cardAnswer.textContent = isSwapped ? question.question : question.answer;
+                
+                // Reset card flip state
+                flashcard.classList.remove('flipped');
+                
+                // Update active question in sidebar
+                document.querySelectorAll('.question-item').forEach((item, i) => {
+                    if (i === index) {
+                        item.classList.add('active');
+                        // Scroll into view if needed
+                        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // Update navigation buttons
+                prevCardBtn.disabled = index === 0;
+                nextCardBtn.disabled = index === sessionQuestions.length - 1;
+                
+                currentQuestionIndex = index;
+                saveAppState();
+            }
+            
+            function initializeQuiz() {
+                // Create a shuffled copy of the questions for this session
+                sessionQuestions = [...questionSets[currentSetIndex].questions];
+                for (let i = sessionQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [sessionQuestions[i], sessionQuestions[j]] = [sessionQuestions[j], sessionQuestions[i]];
+                }
+                
+                currentQuestionIndex = 0;
+                userAnswers = new Array(sessionQuestions.length).fill(null);
+                selectedOptionIndex = null;
+                
+                // Show best score
+                const setKey = `set${currentSetIndex}`;
+                const bestScore = achievements[setKey].quiz;
+                bestScoreText.textContent = bestScore > 0 ? `Best: ${bestScore}%` : 'Best: Not set';
+                
+                showQuizQuestion(0);
+            }
+            
+            function initializeQuizNoOptions() {
+                // Create a shuffled copy of the questions for this session
+                sessionQuestions = [...questionSets[currentSetIndex].questions];
+                for (let i = sessionQuestions.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [sessionQuestions[i], sessionQuestions[j]] = [sessionQuestions[j], sessionQuestions[i]];
+                }
+                
+                currentQuestionIndex = 0;
+                userAnswers = new Array(sessionQuestions.length).fill(null);
+                
+                // Show best score
+                const setKey = `set${currentSetIndex}`;
+                const bestScore = achievements[setKey].typeAnswer;
+                noOptionsBestScoreText.textContent = bestScore > 0 ? `Best: ${bestScore}%` : 'Best: Not set';
+                
+                showQuizNoOptionsQuestion(0);
+            }
+            
+            function showQuizNoOptionsQuestion(index) {
+                const question = sessionQuestions[index];
+                
+                // Update progress text
+                noOptionsProgressText.textContent = `Question ${index + 1} of ${sessionQuestions.length}`;
+                
+                // Update progress bar
+                noOptionsProgressBarInner.style.width = `${((index) / sessionQuestions.length) * 100}%`;
+                
+                // Set question text
+                noOptionsQuestion.textContent = `What is the ${isSwapped ? 'French' : 'English'} translation of "${isSwapped ? question.answer : question.question}"?`;
+                
+                // Clear input and feedback
+                answerInput.value = '';
+                noOptionsFeedbackContainer.innerHTML = '';
+                
+                // Disable submit button
+                submitAnswerBtn.disabled = true;
+                submitAnswerBtn.textContent = 'Submit Answer';
+                
+                // Focus on input
+                answerInput.focus();
+                
+                currentQuestionIndex = index;
+                saveAppState();
+            }
+            
+            function generateOptionsForQuestion(question, count) {
+                // Start with the correct answer
+                let options = [isSwapped ? question.question : question.answer];
+                
+                // Get all answers from other questions in the original set
+                let otherAnswers = questionSets[currentSetIndex].questions
+                    .filter(q => (isSwapped ? q.answer !== question.answer : q.question !== question.question))
+                    .map(q => isSwapped ? q.question : q.answer);
+                
+                // Shuffle the other answers
+                for (let i = otherAnswers.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [otherAnswers[i], otherAnswers[j]] = [otherAnswers[j], otherAnswers[i]];
+                }
+                
+                // Take unique answers from other questions
+                for (let i = 0; i < otherAnswers.length && options.length < count; i++) {
+                    if (!options.includes(otherAnswers[i])) {
+                        options.push(otherAnswers[i]);
+                    }
+                }
+                
+                // If we still don't have enough options, add placeholder options
+                while (options.length < count) {
+                    options.push("Option " + options.length);
+                }
+                
+                // Shuffle the options so the correct answer isn't always first
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [options[i], options[j]] = [options[j], options[i]];
+                }
+                
+                return options;
+            }
+            
+            function showQuizQuestion(index) {
+                const question = sessionQuestions[index];
+                
+                // Update progress text
+                progressText.textContent = `Question ${index + 1} of ${sessionQuestions.length}`;
+                
+                // Update progress bar
+                progressBar.style.width = `${((index) / sessionQuestions.length) * 100}%`;
+                
+                // Set question text
+                quizQuestion.textContent = `What is the ${isSwapped ? 'French' : 'English'} translation of "${isSwapped ? question.answer : question.question}"?`;
+                
+                // Clear previous options and feedback
+                optionsContainer.innerHTML = '';
+                feedbackContainer.innerHTML = '';
+                
+                // Set grid class based on option count
+                optionsContainer.className = 'options-container';
+                if (quizOptionCount === 2) optionsContainer.classList.add('grid-2');
+                else if (quizOptionCount === 4) optionsContainer.classList.add('grid-4');
+                else if (quizOptionCount === 6) optionsContainer.classList.add('grid-6');
+                
+                // Generate options for this question
+                const options = generateOptionsForQuestion(question, quizOptionCount);
+                
+                // Add options
+                options.forEach((option, optIndex) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.textContent = option;
+                    optionElement.dataset.index = optIndex;
+                    optionElement.dataset.color = optionColors[optIndex % optionColors.length];
+                    optionElement.addEventListener('click', function() {
+                        // Disable all options to prevent multiple clicks
+                        document.querySelectorAll('.option').forEach(opt => {
+                            opt.style.pointerEvents = 'none';
+                        });
+                        
+                        // Select this option
+                        document.querySelectorAll('.option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        optionElement.classList.add('selected');
+                        selectedOptionIndex = optIndex;
+                        
+                        // Immediately check the answer
+                        handleAnswerSelection(optionElement, option, question);
+                    });
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                currentQuestionIndex = index;
+                saveAppState();
+            }
+            
+            function handleAnswerSelection(optionElement, selectedAnswer, question) {
+                const correctAnswer = isSwapped ? question.question : question.answer;
+                const isCorrect = checkAnswer(selectedAnswer, correctAnswer);
+                
+                // Store user's answer
+                userAnswers[currentQuestionIndex] = {
+                    optionIndex: selectedOptionIndex,
+                    isCorrect: isCorrect,
+                    answerText: selectedAnswer
+                };
+                
+                // Show feedback
+                feedbackContainer.innerHTML = '';
+                const feedbackElement = document.createElement('div');
+                feedbackElement.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+                feedbackElement.innerHTML = isCorrect ? 
+                    '<i class="fas fa-check-circle"></i> Correct! Well done.' :
+                    `<i class="fas fa-times-circle"></i> Incorrect. The correct answer is: ${correctAnswer}`;
+                
+                feedbackContainer.appendChild(feedbackElement);
+                
+                // Update option colors
+                document.querySelectorAll('.option').forEach((opt, i) => {
+                    const optionText = opt.textContent;
+                    const isOptionCorrect = checkAnswer(optionText, correctAnswer);
+                    
+                    if (i === selectedOptionIndex && !isCorrect) {
+                        opt.classList.add('incorrect');
+                    } else if (isOptionCorrect) {
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('faded');
+                    }
+                });
+                
+                // Vibrate on incorrect answer (mobile only)
+                if (!isCorrect && 'vibrate' in navigator) {
+                    navigator.vibrate(200);
+                }
+                
+                // Automatically proceed to next question after a delay
+                setTimeout(() => {
+                    proceedToNextQuestion();
+                }, 1500);
+            }
+            
+            function checkAnswer(userAnswer, correctAnswer) {
+                // Normalize strings for comparison (remove diacritics and case)
+                const normalizedUser = normalizeString(userAnswer);
+                const normalizedCorrect = normalizeString(correctAnswer);
+                
+                // Check for exact match first
+                if (normalizedUser === normalizedCorrect) return true;
+                
+                // Check for synonyms (answers with "/")
+                if (correctAnswer.includes('/')) {
+                    const synonyms = correctAnswer.split('/').map(s => normalizeString(s.trim()));
+                    return synonyms.includes(normalizedUser);
+                }
+                
+                return false;
+            }
+            
+            function handleAnswerSubmission() {
+                const question = sessionQuestions[currentQuestionIndex];
+                const userAnswer = answerInput.value.trim();
+                const correctAnswer = isSwapped ? question.question : question.answer;
+                const isCorrect = checkAnswer(userAnswer, correctAnswer);
+                
+                // Store user's answer
+                userAnswers[currentQuestionIndex] = {
+                    answerText: userAnswer,
+                    isCorrect: isCorrect
+                };
+                
+                // Show feedback
+                noOptionsFeedbackContainer.innerHTML = '';
+                const feedbackElement = document.createElement('div');
+                feedbackElement.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+                feedbackElement.innerHTML = isCorrect ? 
+                    '<i class="fas fa-check-circle"></i> Correct! Well done.' :
+                    `<i class="fas fa-times-circle"></i> Incorrect. The correct answer is: ${correctAnswer}`;
+                
+                noOptionsFeedbackContainer.appendChild(feedbackElement);
+                
+                // Vibrate on incorrect answer (mobile only)
+                if (!isCorrect && 'vibrate' in navigator) {
+                    navigator.vibrate(200);
+                }
+                
+                // Disable input and button
+                answerInput.disabled = true;
+                submitAnswerBtn.disabled = true;
+                submitAnswerBtn.textContent = 'Next...';
+                
+                // Automatically proceed to next question after a delay
+                setTimeout(() => {
+                    proceedToNextQuestionNoOptions();
+                }, 1500);
+            }
+            
+            function proceedToNextQuestionNoOptions() {
+                // Re-enable input and button
+                answerInput.disabled = false;
+                submitAnswerBtn.disabled = true;
+                submitAnswerBtn.textContent = 'Submit Answer';
+                
+                if (currentQuestionIndex < sessionQuestions.length - 1) {
+                    showQuizNoOptionsQuestion(currentQuestionIndex + 1);
+                } else {
+                    // Finish quiz
+                    finishQuiz();
+                }
+                saveAppState();
+            }
+            
+            function proceedToNextQuestion() {
+                if (currentQuestionIndex < sessionQuestions.length - 1) {
+                    selectedOptionIndex = null;
+                    showQuizQuestion(currentQuestionIndex + 1);
+                } else {
+                    // Finish quiz
+                    finishQuiz();
+                }
+                saveAppState();
+            }
+            
+            function endQuizEarly() {
+                // Calculate score based on answered questions only
+                let answeredCount = 0;
+                let correctCount = 0;
+                const incorrect = [];
+                
+                userAnswers.forEach((answer, questionIndex) => {
+                    if (answer !== null) {
+                        answeredCount++;
+                        if (answer.isCorrect) {
+                            correctCount++;
+                        } else {
+                            incorrect.push({
+                                question: sessionQuestions[questionIndex].question,
+                                userAnswer: answer.answerText,
+                                correctAnswer: sessionQuestions[questionIndex].answer
+                            });
+                        }
+                    }
+                });
+                
+                // If no questions answered, show message and return
+                if (answeredCount === 0) {
+                    alert('Please answer at least one question before ending the quiz.');
+                    return;
+                }
+                
+                const score = Math.round((correctCount / answeredCount) * 100);
+                
+                // Update achievement
+                const bestScore = updateAchievement(score);
+                
+                // Update results view
+                scorePercentage.textContent = `${score}%`;
+                scoreDescription.textContent = `You answered ${correctCount} out of ${answeredCount} questions correctly`;
+                
+                // Show if this is a new best score
+                if (score >= bestScore) {
+                    scoreDescription.textContent += score === bestScore ? 
+                        ` (Your personal best!)` : ` (New personal best!)`;
+                }
+                
+                // Clear previous incorrect questions
+                incorrectQuestions.innerHTML = '<h3 class="incorrect-title">Verbs to Review</h3>';
+                
+                // Add incorrect questions
+                if (incorrect.length === 0) {
+                    incorrectQuestions.innerHTML += '<p>Perfect! You got all answered questions correct.</p>';
+                } else {
+                    incorrect.forEach(item => {
+                        const incorrectItem = document.createElement('div');
+                        incorrectItem.className = 'incorrect-item';
+                        incorrectItem.innerHTML = `
+                            <div class="question-incorrect">${item.question}</div>
+                            <div class="answer-compare">
+                                <div class="user-answer">Your answer: ${item.userAnswer}</div>
+                                <div class="correct-answer">Correct answer: ${item.correctAnswer}</div>
+                            </div>
+                        `;
+                        incorrectQuestions.appendChild(incorrectItem);
+                    });
+                }
+                
+                // Show results view
+                showView(resultsView);
+                saveAppState();
+            }
+            
+            function finishQuiz() {
+                // Calculate score
+                let correctCount = 0;
+                const incorrect = [];
+                
+                userAnswers.forEach((answer, questionIndex) => {
+                    if (answer && answer.isCorrect) {
+                        correctCount++;
+                    } else {
+                        incorrect.push({
+                            question: sessionQuestions[questionIndex].question,
+                            userAnswer: answer ? answer.answerText : "Not answered",
+                            correctAnswer: sessionQuestions[questionIndex].answer
+                        });
+                    }
+                });
+                
+                const score = Math.round((correctCount / sessionQuestions.length) * 100);
+                
+                // Update achievement
+                const bestScore = updateAchievement(score);
+                
+                // Update results view
+                scorePercentage.textContent = `${score}%`;
+                scoreDescription.textContent = `You answered ${correctCount} out of ${sessionQuestions.length} questions correctly`;
+                
+                // Show if this is a new best score
+                if (score >= bestScore) {
+                    scoreDescription.textContent += score === bestScore ? 
+                        ` (Your personal best!)` : ` (New personal best!)`;
+                }
+                
+                // Clear previous incorrect questions
+                incorrectQuestions.innerHTML = '<h3 class="incorrect-title">Verbs to Review</h3>';
+                
+                // Add incorrect questions
+                if (incorrect.length === 0) {
+                    incorrectQuestions.innerHTML += '<p>Perfect! You got all questions correct.</p>';
+                } else {
+                    incorrect.forEach(item => {
+                        const incorrectItem = document.createElement('div');
+                        incorrectItem.className = 'incorrect-item';
+                        incorrectItem.innerHTML = `
+                            <div class="question-incorrect">${item.question}</div>
+                            <div class="answer-compare">
+                                <div class="user-answer">Your answer: ${item.userAnswer}</div>
+                                <div class="correct-answer">Correct answer: ${item.correctAnswer}</div>
+                            </div>
+                        `;
+                        incorrectQuestions.appendChild(incorrectItem);
+                    });
+                }
+                
+                // Show results view
+                showView(resultsView);
+                saveAppState();
+            }
+            
+            // Initialize the app
+            initAchievements();
+            generateSetCards();
+            updateSwapIndicator();
+            
+            // Try to load saved state, otherwise show set selection
+            if (!loadAppState()) {
+                showView(setSelectionView);
+            }
+            
+            // Save state before unload
+            window.addEventListener('beforeunload', saveAppState);
+        });
+    </script>
+</body>
+</html>
